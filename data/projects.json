@@ -1,0 +1,285 @@
+{
+  "source": {
+    "documents": [
+      "eren_isik_cv_EN_2026.pdf",
+      "eren_isik_cv_TR_2026.pdf"
+    ],
+    "canonicalLanguage": "English",
+    "profileUrl": "https://github.com/Ursidae0"
+  },
+  "education": [
+    {
+      "institution": "Izmir Institute of Technology",
+      "location": "Izmir, Turkiye",
+      "degree": "B.Sc. Computer Engineering",
+      "period": "2023 - 2027",
+      "gpa": "3.25 / 4.00"
+    }
+  ],
+  "experience": [
+    {
+      "organization": "Cengaver Rover",
+      "role": "Software Team Member",
+      "program": "TEKNOFEST University Rover Competition",
+      "location": "Izmir, Turkiye",
+      "period": "September 2025 - Present",
+      "categories": [
+        "Robotics",
+        "Embedded Systems"
+      ],
+      "highlights": [
+        "Rewrote the rover drive firmware from MicroPython to C with the Raspberry Pi Pico SDK, replacing a polling loop with a 1 kHz real-time control loop.",
+        "Added CRC-8 packet integrity, a hardware watchdog, and a Dead Man's Switch, none of which were present in the original firmware.",
+        "Designed a framed binary protocol over USB CDC and implemented the matching host-side driver as a ROS 2 node running on NVIDIA Jetson.",
+        "Built layered fail-safe behavior with communication-timeout disarming, hardware-watchdog reset, and GPIO-level motor cutoff."
+      ],
+      "technologies": [
+        "C",
+        "MicroPython",
+        "Raspberry Pi Pico SDK",
+        "ARM Cortex-M0+",
+        "ROS 2",
+        "NVIDIA Jetson",
+        "USB CDC",
+        "CRC-8",
+        "Hardware Watchdog",
+        "GPIO"
+      ]
+    }
+  ],
+  "technicalSkills": {
+    "programming": [
+      "Python",
+      "C/C++",
+      "CUDA"
+    ],
+    "libraries": [
+      "scikit-learn",
+      "OpenCV",
+      "NumPy",
+      "Matplotlib",
+      "scikit-fuzzy"
+    ],
+    "developerTools": [
+      "Git",
+      "Docker",
+      "CMake",
+      "Bash",
+      "nvprof",
+      "Raspberry Pi Pico SDK"
+    ],
+    "platformsAndSystems": [
+      "ROS 2",
+      "NVIDIA Jetson Nano",
+      "TensorRT",
+      "Raspberry Pi Pico",
+      "ARM Cortex-M0+",
+      "USB CDC"
+    ],
+    "languages": [
+      "Turkish - Native",
+      "English - B2"
+    ]
+  },
+  "projects": [
+    {
+      "id": "sparse-gpu-kernels",
+      "title": "Sparse GPU Kernels",
+      "subtitle": "Sputnik paper reproduction across a modern GPU generation",
+      "period": "December 2025 - January 2026",
+      "categories": [
+        "CUDA"
+      ],
+      "technologies": [
+        "CUDA",
+        "C++",
+        "Docker",
+        "NVIDIA NGC",
+        "cuSPARSE",
+        "cuBLAS"
+      ],
+      "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+      "summary": "Reproduced and benchmarked the Sputnik sparse-matrix CUDA kernels from Gale et al. (SC '20) on an RTX 4070 Super, validating that the paper's sparsity crossover behavior transfers across GPU generations.",
+      "metrics": [
+        {
+          "value": "7.8x",
+          "label": "speedup over dense cuBLAS",
+          "context": "Measured at 99% sparsity."
+        },
+        {
+          "value": "4.3 TFLOPs",
+          "label": "peak SpMM throughput",
+          "context": "Recorded on an NVIDIA RTX 4070 Super."
+        },
+        {
+          "value": "70.5%",
+          "label": "sparsity break-even point",
+          "context": "Reproduced against the paper's approximately 71% result on V100."
+        }
+      ],
+      "highlights": [
+        "Deployed the Sputnik CUDA library inside an NVIDIA NGC container.",
+        "Adapted the container configuration for current Linux kernel and NVIDIA driver versions.",
+        "Benchmarked SpMM and SDDMM kernels against cuSPARSE and dense cuBLAS baselines.",
+        "Confirmed that sparse-kernel efficiency and the break-even threshold scale across GPU generations."
+      ],
+      "technicalSpecs": [
+        {
+          "label": "Workloads",
+          "value": "SpMM and SDDMM"
+        },
+        {
+          "label": "GPU",
+          "value": "NVIDIA GeForce RTX 4070 Super"
+        },
+        {
+          "label": "Baseline",
+          "value": "cuSPARSE and dense cuBLAS"
+        },
+        {
+          "label": "Source paper",
+          "value": "Gale et al., SC '20"
+        },
+        {
+          "label": "Environment",
+          "value": "NVIDIA NGC container on an updated Linux and NVIDIA driver stack"
+        }
+      ]
+    },
+    {
+      "id": "jetson-nano-inference",
+      "title": "Neural Network Inference on NVIDIA Jetson Nano",
+      "subtitle": "TensorRT model comparison and embedded GPU profiling",
+      "period": "December 2025",
+      "categories": [
+        "Robotics",
+        "CUDA",
+        "Computer Vision"
+      ],
+      "technologies": [
+        "Python",
+        "CUDA",
+        "TensorRT",
+        "Docker",
+        "nvprof",
+        "NVIDIA Jetson Nano"
+      ],
+      "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+      "summary": "Deployed three TensorRT-optimized object-detection networks on Jetson Nano and profiled their latency and streaming-multiprocessor efficiency to identify the fastest model and the dominant post-processing bottleneck.",
+      "metrics": [
+        {
+          "value": "~650 ms",
+          "label": "PeopleNet inference per image",
+          "context": "Fastest of the three evaluated models on the embedded GPU."
+        },
+        {
+          "value": "99.9%",
+          "label": "peak SM utilization",
+          "context": "Reached by fused convolution kernels."
+        },
+        {
+          "value": "~12.6%",
+          "label": "NMS SM efficiency",
+          "context": "Identified as the primary post-processing bottleneck."
+        }
+      ],
+      "highlights": [
+        "Deployed PeopleNet, SSD-Inception-v2, and SSD-MobileNet-v2 with TensorRT optimization.",
+        "Compared end-to-end inference performance on the Jetson Nano's Tegra X1 GPU.",
+        "Profiled streaming-multiprocessor efficiency across each model with nvprof.",
+        "Traced the principal performance limitation to non-maximum suppression rather than convolution."
+      ],
+      "technicalSpecs": [
+        {
+          "label": "Platform",
+          "value": "NVIDIA Jetson Nano"
+        },
+        {
+          "label": "SoC",
+          "value": "NVIDIA Tegra X1"
+        },
+        {
+          "label": "Models",
+          "value": "PeopleNet, SSD-Inception-v2, SSD-MobileNet-v2"
+        },
+        {
+          "label": "Runtime",
+          "value": "TensorRT"
+        },
+        {
+          "label": "Profiler",
+          "value": "nvprof"
+        }
+      ]
+    },
+    {
+      "id": "computer-vision-portfolio",
+      "title": "Computer Vision Project Portfolio",
+      "subtitle": "People counting and retinal vessel extraction",
+      "period": "December 2025 - January 2026",
+      "categories": [
+        "Computer Vision"
+      ],
+      "technologies": [
+        "Python",
+        "OpenCV",
+        "scikit-learn",
+        "scikit-fuzzy",
+        "MLP",
+        "Fuzzy C-Means"
+      ],
+      "repository": "https://github.com/Ursidae0/ImageUnderstanding",
+      "summary": "A two-part computer-vision portfolio covering morphology-driven crowd estimation and a Python reproduction of a hybrid retinal blood-vessel extraction pipeline evaluated on the DRIVE dataset.",
+      "metrics": [
+        {
+          "value": "10.64%",
+          "label": "best people-counting MAPE",
+          "context": "Produced by the strongest morphological-feature method."
+        },
+        {
+          "value": "86.27%",
+          "label": "estimates within 15%",
+          "context": "Share of crowd-count estimates within 15% of ground truth."
+        },
+        {
+          "value": "0.86",
+          "label": "retinal extraction AUC",
+          "context": "Measured on the DRIVE test set."
+        },
+        {
+          "value": "92.6%",
+          "label": "pixel accuracy",
+          "context": "Measured on the DRIVE test set."
+        }
+      ],
+      "highlights": [
+        "Extracted closing- and opening-based morphological features from foreground masks.",
+        "Trained an MLP regressor to estimate crowd count from the engineered features.",
+        "Reimplemented a MATLAB hybrid Fuzzy C-Means and supervised-classification retinal pipeline in Python.",
+        "Attributed the remaining gap from the paper's reported 0.975 AUC to its proprietary Root Guided Decision Tree, which is unavailable in standard machine-learning libraries."
+      ],
+      "technicalSpecs": [
+        {
+          "label": "People-counting model",
+          "value": "Multi-layer perceptron"
+        },
+        {
+          "label": "Feature pipeline",
+          "value": "Foreground masks with morphological closing and opening"
+        },
+        {
+          "label": "Retinal dataset",
+          "value": "DRIVE test set"
+        },
+        {
+          "label": "Retinal pipeline",
+          "value": "Hybrid Fuzzy C-Means plus supervised classification"
+        },
+        {
+          "label": "Paper reference",
+          "value": "Reported AUC 0.975 with a proprietary Root Guided Decision Tree"
+        }
+      ]
+    }
+  ]
+}
