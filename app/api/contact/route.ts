@@ -107,7 +107,8 @@ export async function POST(request: Request) {
   const resendApiKey = process.env.RESEND_API_KEY;
   const contactToEmail = process.env.CONTACT_TO_EMAIL;
   const contactFromEmail =
-    process.env.CONTACT_FROM_EMAIL ?? "Eren Isik Lab <onboarding@resend.dev>";
+    process.env.CONTACT_FROM_EMAIL?.trim() ||
+    "Eren Isik Lab <onboarding@resend.dev>";
 
   if (resendApiKey && contactToEmail) {
     let response: Response;

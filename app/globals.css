@@ -308,6 +308,11 @@ a:focus-visible {
   opacity: 1;
 }
 
+.render-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 @keyframes fog-drift-far {
   from {
     transform: translate3d(-3%, -1%, 0) scale(1);
@@ -356,6 +361,10 @@ a:focus-visible {
 
   .fog-bank {
     filter: blur(38px);
+  }
+
+  .skill-depth-card {
+    transform-style: flat;
   }
 }
 

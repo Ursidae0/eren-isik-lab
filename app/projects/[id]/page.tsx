@@ -7,6 +7,7 @@ import { ForestBackdrop } from "@/components/forest-backdrop";
 import { Navigation } from "@/components/navigation";
 import { RainCanvas } from "@/components/rain-canvas";
 import { getProjectById, projects } from "@/lib/projects";
+import { siteConfig } from "@/lib/site";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -31,8 +32,34 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${project.title} | Eren Isik Lab`,
-    description: project.summary,
+    title: project.title,
+    description: `${project.summary} Built with ${project.technologies
+      .slice(0, 3)
+      .join(", ")}.`,
+    alternates: {
+      canonical: `/projects/${project.id}`,
+    },
+    openGraph: {
+      type: "article",
+      url: `/projects/${project.id}`,
+      siteName: siteConfig.shortName,
+      title: `${project.title} | ${siteConfig.shortName}`,
+      description: project.summary,
+      images: [
+        {
+          url: `/projects/${project.id}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} technical project`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | ${siteConfig.shortName}`,
+      description: project.summary,
+      images: [`/projects/${project.id}/opengraph-image`],
+    },
   };
 }
 

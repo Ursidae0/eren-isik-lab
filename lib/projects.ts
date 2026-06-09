@@ -24,6 +24,8 @@ export type TechnicalSpec = {
 export type Project = {
   id: string;
   title: string;
+  image: string;
+  imageAlt: string;
   subtitle: string;
   period: string;
   categories: FilterableProjectCategory[];
@@ -45,4 +47,3 @@ export const education = portfolioData.education;
 export function getProjectById(id: string) {
   return projects.find((project) => project.id === id);
 }
-

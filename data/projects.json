@@ -85,6 +85,8 @@
     {
       "id": "sparse-gpu-kernels",
       "title": "Sparse GPU Kernels",
+      "image": "/projects/sparse-gpu-kernels.svg",
+      "imageAlt": "Sparse matrix blocks flowing through a stylized GPU compute grid",
       "subtitle": "Sputnik paper reproduction across a modern GPU generation",
       "period": "December 2025 - January 2026",
       "categories": [
@@ -149,6 +151,8 @@
     {
       "id": "jetson-nano-inference",
       "title": "Neural Network Inference on NVIDIA Jetson Nano",
+      "image": "/projects/jetson-nano-inference.svg",
+      "imageAlt": "Neural network inference graph connected to an embedded Jetson module",
       "subtitle": "TensorRT model comparison and embedded GPU profiling",
       "period": "December 2025",
       "categories": [
@@ -215,6 +219,8 @@
     {
       "id": "computer-vision-portfolio",
       "title": "Computer Vision Project Portfolio",
+      "image": "/projects/computer-vision-portfolio.svg",
+      "imageAlt": "Computer vision targeting reticle analyzing a geometric scene",
       "subtitle": "People counting and retinal vessel extraction",
       "period": "December 2025 - January 2026",
       "categories": [

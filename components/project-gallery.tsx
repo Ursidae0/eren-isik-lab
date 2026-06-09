@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -72,12 +73,12 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
         </div>
 
         <motion.div layout className="mt-12 grid gap-5 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence initial={false} mode="popLayout">
             {visibleProjects.map((project, index) => (
               <motion.article
                 layout
                 key={project.id}
-                initial={{ opacity: 0, y: 16 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{
@@ -85,9 +86,22 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   delay: index * 0.04,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="glass-card group flex min-h-[31rem] flex-col overflow-hidden p-6 transition-colors hover:border-terminal/20"
+                className="glass-card group flex min-h-[36rem] flex-col overflow-hidden transition-colors hover:border-terminal/20"
               >
-                <div className="flex items-start justify-between gap-5">
+                <div className="relative aspect-[16/9] overflow-hidden border-b border-white/[0.07] bg-forest-950/50">
+                  <Image
+                    src={project.image}
+                    alt={project.imageAlt}
+                    fill
+                    loading="lazy"
+                    decoding="async"
+                    unoptimized
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover opacity-75 transition duration-500 group-hover:scale-[1.025] group-hover:opacity-95"
+                  />
+                </div>
+
+                <div className="flex items-start justify-between gap-5 px-6 pt-6">
                   <div className="flex flex-wrap gap-2">
                     {project.categories.map((category) => (
                       <span
@@ -103,7 +117,7 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   </span>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-8 px-6">
                   <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mist-600">
                     {project.period}
                   </p>
@@ -115,7 +129,7 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   </p>
                 </div>
 
-                <div className="mt-7 grid grid-cols-2 gap-2">
+                <div className="mt-7 grid grid-cols-2 gap-2 px-6">
                   {project.metrics.slice(0, 2).map((metric) => (
                     <div
                       key={`${project.id}-${metric.label}`}
@@ -131,7 +145,7 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   ))}
                 </div>
 
-                <div className="mt-auto pt-8">
+                <div className="mt-auto px-6 pb-6 pt-8">
                   <div className="mb-5 flex flex-wrap gap-x-3 gap-y-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mist-600">
                     {project.technologies.slice(0, 4).map((technology) => (
                       <span key={technology}>{technology}</span>
@@ -160,4 +174,3 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
     </section>
   );
 }
-

@@ -14,7 +14,7 @@ export function Navigation() {
         <a
           href="/#top"
           className="group flex items-center gap-3"
-          aria-label="Eren Isik Lab home"
+          aria-label="EI, Eren Isik Lab home"
         >
           <span className="grid size-9 place-items-center rounded-lg border border-terminal/20 bg-terminal/5 font-mono text-sm font-semibold text-terminal shadow-terminal transition-colors group-hover:bg-terminal/10">
             EI
