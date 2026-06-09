@@ -1,0 +1,382 @@
+@import "tailwindcss";
+@config "../tailwind.config.ts";
+
+:root {
+  color-scheme: dark;
+  --font-sans:
+    "Manrope Variable", "Segoe UI Variable", "Segoe UI", sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", "Cascadia Code", "SFMono-Regular", monospace;
+  --background: #050c08;
+  --foreground: #e1e7e4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  color: #050c08;
+  background: #00ff41;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.site-shell {
+  background:
+    linear-gradient(180deg, rgb(5 12 8 / 3%), rgb(5 12 8 / 26%)),
+    transparent;
+}
+
+.forest-backdrop {
+  background: #050c08;
+  contain: strict;
+}
+
+.forest-sky {
+  background:
+    radial-gradient(
+      ellipse at 16% 8%,
+      rgb(39 76 59 / 52%),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 84% 34%,
+      rgb(26 46 36 / 58%),
+      transparent 42%
+    ),
+    linear-gradient(
+      160deg,
+      #1a2e24 0%,
+      #102219 26%,
+      #09140e 62%,
+      #050c08 100%
+    );
+}
+
+.forest-light-shaft {
+  opacity: 0.32;
+  background:
+    linear-gradient(
+      106deg,
+      transparent 12%,
+      rgb(174 208 192 / 8%) 26%,
+      transparent 39%
+    ),
+    linear-gradient(
+      72deg,
+      transparent 58%,
+      rgb(139 184 160 / 6%) 72%,
+      transparent 83%
+    );
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+.pine-ridge {
+  position: absolute;
+  inset-inline: -4%;
+  bottom: -2%;
+  width: 108%;
+  filter: blur(0.25px);
+}
+
+.pine-ridge-back {
+  height: 64%;
+  color: #183126;
+  opacity: 0.12;
+}
+
+.pine-ridge-front {
+  height: 52%;
+  color: #020705;
+  opacity: 0.19;
+}
+
+.forest-grid {
+  opacity: 0.07;
+  background-image:
+    linear-gradient(rgb(121 255 155 / 13%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(121 255 155 / 13%) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom, black, transparent 68%);
+}
+
+.fog-bank {
+  left: -18%;
+  width: 136%;
+  border-radius: 50%;
+  filter: blur(54px);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.fog-bank-far {
+  top: 24%;
+  height: 24%;
+  opacity: 0.36;
+  background:
+    radial-gradient(
+      ellipse at 22% 54%,
+      rgb(171 191 181 / 19%),
+      transparent 26%
+    ),
+    radial-gradient(
+      ellipse at 72% 48%,
+      rgb(196 210 203 / 14%),
+      transparent 29%
+    );
+  animation: fog-drift-far 52s ease-in-out infinite alternate;
+}
+
+.fog-bank-near {
+  bottom: 5%;
+  height: 31%;
+  opacity: 0.43;
+  background:
+    radial-gradient(
+      ellipse at 28% 58%,
+      rgb(128 153 141 / 20%),
+      transparent 29%
+    ),
+    radial-gradient(
+      ellipse at 68% 44%,
+      rgb(173 191 182 / 17%),
+      transparent 31%
+    );
+  animation: fog-drift-near 38s ease-in-out infinite alternate;
+}
+
+.forest-vignette {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(2 7 5 / 44%),
+      transparent 20%,
+      transparent 80%,
+      rgb(2 7 5 / 48%)
+    ),
+    linear-gradient(180deg, transparent 44%, rgb(2 7 5 / 58%) 100%);
+}
+
+.glass-card {
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, rgb(35 52 44 / 52%), rgb(5 12 8 / 56%));
+  box-shadow: 0 24px 80px rgb(0 0 0 / 34%);
+  backdrop-filter: blur(18px) saturate(115%);
+}
+
+.glass-nav {
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 1rem;
+  background: rgb(5 16 10 / 76%);
+  box-shadow: 0 18px 60px rgb(0 0 0 / 24%);
+  backdrop-filter: blur(20px) saturate(125%);
+}
+
+.terminal-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid rgb(0 255 65 / 28%);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  color: #050c08;
+  background: #00ff41;
+  box-shadow:
+    0 0 0 1px rgb(0 255 65 / 14%),
+    0 0 30px rgb(0 255 65 / 14%);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.terminal-button:hover {
+  transform: translateY(-2px);
+  background: #79ff9b;
+  box-shadow:
+    0 0 0 1px rgb(0 255 65 / 20%),
+    0 0 38px rgb(0 255 65 / 22%);
+}
+
+.terminal-button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #00ff41;
+  outline-offset: 4px;
+}
+
+.status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background: #00ff41;
+  box-shadow: 0 0 16px rgb(0 255 65 / 88%);
+  animation: status-pulse 2.4s ease-in-out infinite;
+}
+
+.terminal-field {
+  display: flex;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  padding-bottom: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.terminal-field:focus-within {
+  border-color: rgb(0 255 65 / 32%);
+}
+
+.terminal-prompt {
+  flex: 0 0 auto;
+  padding-top: 0.1rem;
+  color: #00ff41;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.terminal-input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #e1e7e4;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.terminal-input::placeholder {
+  color: #60706a;
+}
+
+.terminal-cursor {
+  margin-left: 0.15rem;
+  color: #00ff41;
+  animation: cursor-blink 0.9s steps(1) infinite;
+}
+
+.skill-depth-card {
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 1rem;
+  color: inherit;
+  background:
+    linear-gradient(145deg, rgb(45 59 54 / 34%), rgb(5 12 8 / 65%));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 4%),
+    0 18px 50px rgb(0 0 0 / 20%);
+  transform-style: preserve-3d;
+}
+
+.skill-depth-card::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  border-radius: inherit;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 75% 15%, rgb(0 255 65 / 12%), transparent 34%);
+  transition: opacity 220ms ease;
+}
+
+.skill-depth-card:hover::after,
+.skill-depth-card:focus-visible::after {
+  opacity: 1;
+}
+
+@keyframes fog-drift-far {
+  from {
+    transform: translate3d(-3%, -1%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(4%, 1%, 0) scale(1.04);
+  }
+}
+
+@keyframes fog-drift-near {
+  from {
+    transform: translate3d(4%, 1%, 0) scale(1.03);
+  }
+
+  to {
+    transform: translate3d(-4%, -1%, 0) scale(1);
+  }
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes status-pulse {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+@media (max-width: 640px) {
+  .glass-nav {
+    border-radius: 0.875rem;
+  }
+
+  .pine-ridge-back {
+    height: 58%;
+  }
+
+  .pine-ridge-front {
+    height: 46%;
+  }
+
+  .fog-bank {
+    filter: blur(38px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-card,
+  .glass-nav {
+    background: rgb(11 26 16 / 94%);
+  }
+}
