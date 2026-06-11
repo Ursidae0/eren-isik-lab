@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import { MotionProvider } from "@/components/motion-provider";
 import { siteConfig } from "@/lib/site";
 
 import "@fontsource-variable/jetbrains-mono";
@@ -50,9 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
-        <MotionProvider>{children}</MotionProvider>
-      </body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }

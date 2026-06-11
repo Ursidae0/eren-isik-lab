@@ -1,76 +1,72 @@
-import { experience, technicalSkills } from "@/lib/projects";
+import { education, experience, technicalSkills } from "@/lib/projects";
 
-const skillGroups = [
-  { label: "Programming", skills: technicalSkills.programming },
-  { label: "Libraries", skills: technicalSkills.libraries },
-  { label: "Toolchain", skills: technicalSkills.developerTools },
-  { label: "Platforms", skills: technicalSkills.platformsAndSystems },
+const featuredSkills = [
+  ...technicalSkills.programming,
+  "ROS 2",
+  "TensorRT",
+  "OpenCV",
+  "Raspberry Pi Pico",
+  "Docker",
 ];
 
 export function ProfileSnapshot() {
   const role = experience[0];
+  const school = education[0];
 
   return (
-    <section
-      id="experience"
-      className="relative z-20 px-6 pb-24 sm:px-10 lg:px-12"
-    >
-      <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <article className="glass-card p-6 sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-terminal">
-                Current field experience
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold text-mist-100">
-                {role.role} / {role.organization}
-              </h2>
-              <p className="mt-1 text-sm text-mist-600">{role.program}</p>
-            </div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mist-600">
-              {role.period}
+    <section id="about" className="paper-section">
+      <div className="section-shell profile-grid">
+        <div>
+          <p className="section-kicker">About</p>
+          <h2 className="profile-lead">
+            I like difficult constraints and tangible outcomes.
+          </h2>
+          <p className="profile-copy">
+            I am a computer engineering student in Türkiye focused on robotics,
+            GPU performance, and embedded systems. My work moves between
+            low-level control, hardware-aware optimization, and practical
+            computer vision, always with measured results.
+          </p>
+          <a
+            href="/eren-isik-resume-2026.pdf"
+            className="text-link"
+            download
+          >
+            Download full resume <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+
+        <div className="profile-aside">
+          <div className="profile-block">
+            <span className="profile-label">Now</span>
+            <h3>
+              {role.role}
+              <br />
+              at {role.organization}
+            </h3>
+            <p>
+              {role.program} · {role.period}
             </p>
           </div>
 
-          <ul className="mt-8 space-y-4">
-            {role.highlights.map((highlight) => (
-              <li
-                key={highlight}
-                className="flex gap-3 text-sm leading-6 text-mist-300"
-              >
-                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-terminal shadow-terminal" />
-                {highlight}
-              </li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="glass-card p-6 sm:p-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-terminal">
-            Technical index
-          </p>
-          <div className="mt-6 space-y-6">
-            {skillGroups.map((group) => (
-              <div key={group.label}>
-                <h3 className="font-mono text-[10px] uppercase tracking-[0.12em] text-mist-600">
-                  {group.label}
-                </h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-1.5 text-xs text-mist-300"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="profile-block">
+            <span className="profile-label">Education</span>
+            <h3>{school.degree}</h3>
+            <p>
+              {school.institution} · {school.period}
+            </p>
           </div>
-        </article>
+
+          <div className="profile-block">
+            <span className="profile-label">Working with</span>
+            <div className="skill-list">
+              {featuredSkills.map((skill) => (
+                <span key={skill}>{skill}</span>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

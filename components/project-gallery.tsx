@@ -1,94 +1,186 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-
 import {
-  projectCategories,
-  type Project,
-  type ProjectCategory,
-} from "@/lib/projects";
+  useEffect,
+  useRef,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+
+import type { Project } from "@/lib/projects";
 
 type ProjectGalleryProps = {
   projects: Project[];
 };
 
-export function ProjectGallery({ projects }: ProjectGalleryProps) {
-  const [activeCategory, setActiveCategory] =
-    useState<ProjectCategory>("All");
+const treePaths = [
+  "M64 1185C49 1070 72 970 57 853C44 750 70 644 59 531C49 426 71 320 62 210C57 143 62 86 60 14",
+  "M60 180C39 153 22 136 7 126M61 365C79 333 93 307 113 287M59 554C37 526 21 501 4 478M58 749C80 717 96 689 115 666M57 941C37 915 21 888 4 861",
+  "M59 1183C39 1190 23 1196 8 1200M61 1183C81 1190 98 1196 114 1200",
+];
 
-  const visibleProjects = useMemo(
-    () =>
-      activeCategory === "All"
-        ? projects
-        : projects.filter((project) =>
-            project.categories.includes(activeCategory),
-          ),
-    [activeCategory, projects],
+const cardBounds = new WeakMap<HTMLAnchorElement, DOMRect>();
+
+function TreeSvg({ progress = false }: { progress?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 120 1200"
+      preserveAspectRatio="none"
+      className={progress ? "project-tree-svg-progress" : undefined}
+    >
+      {treePaths.map((path, index) => (
+        <path
+          key={path}
+          d={path}
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth={index === 0 ? 9 : index === 1 ? 4 : 5}
+        />
+      ))}
+    </svg>
   );
+}
+
+function handleCardPointerMove(event: ReactPointerEvent<HTMLAnchorElement>) {
+  if (event.pointerType !== "mouse") {
+    return;
+  }
+
+  const card = event.currentTarget;
+  const bounds = cardBounds.get(card) ?? card.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width;
+  const y = (event.clientY - bounds.top) / bounds.height;
+
+  card.style.setProperty("--card-rotate-x", `${(0.5 - y) * 5}deg`);
+  card.style.setProperty("--card-rotate-y", `${(x - 0.5) * 6}deg`);
+  card.style.setProperty("--card-glow-x", `${x * 100}%`);
+  card.style.setProperty("--card-glow-y", `${y * 100}%`);
+}
+
+function cacheCardBounds(event: ReactPointerEvent<HTMLAnchorElement>) {
+  if (event.pointerType === "mouse") {
+    cardBounds.set(
+      event.currentTarget,
+      event.currentTarget.getBoundingClientRect(),
+    );
+  }
+}
+
+function resetCardTilt(event: ReactPointerEvent<HTMLAnchorElement>) {
+  const card = event.currentTarget;
+  cardBounds.delete(card);
+  card.style.setProperty("--card-rotate-x", "0deg");
+  card.style.setProperty("--card-rotate-y", "0deg");
+  card.style.setProperty("--card-glow-x", "50%");
+  card.style.setProperty("--card-glow-y", "50%");
+}
+
+export function ProjectGallery({ projects }: ProjectGalleryProps) {
+  const treeRef = useRef<HTMLDivElement>(null);
+  const growthRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tree = treeRef.current;
+    const growth = growthRef.current;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (!tree || !growth || reducedMotion.matches) {
+      return;
+    }
+
+    tree.classList.add("timeline-enhanced");
+    const rows = Array.from(
+      tree.querySelectorAll<HTMLElement>(".project-row"),
+    );
+    const rowObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            rowObserver.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -16% 0px", threshold: 0.16 },
+    );
+
+    rows.forEach((row) => rowObserver.observe(row));
+
+    let frame = 0;
+    const updateGrowth = () => {
+      const bounds = tree.getBoundingClientRect();
+      const start = window.innerHeight * 0.75;
+      const end = window.innerHeight * 0.25;
+      const distance = bounds.height + start - end;
+      const progress = Math.min(
+        1,
+        Math.max(0, (start - bounds.top) / Math.max(distance, 1)),
+      );
+
+      growth.style.clipPath = `inset(0 0 ${(1 - progress) * 100}% 0)`;
+      frame = 0;
+    };
+
+    const requestGrowthUpdate = () => {
+      if (!frame) {
+        frame = window.requestAnimationFrame(updateGrowth);
+      }
+    };
+
+    updateGrowth();
+    window.addEventListener("scroll", requestGrowthUpdate, { passive: true });
+    window.addEventListener("resize", requestGrowthUpdate, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      rowObserver.disconnect();
+      window.removeEventListener("scroll", requestGrowthUpdate);
+      window.removeEventListener("resize", requestGrowthUpdate);
+    };
+  }, []);
 
   return (
-    <section
-      id="projects"
-      className="relative z-20 border-t border-white/[0.06] px-6 py-24 sm:px-10 lg:px-12"
-    >
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+    <section id="projects" className="paper-section">
+      <div className="section-shell">
+        <div className="section-intro">
+          <p className="section-kicker">Selected work</p>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-terminal">
-              Selected engineering work
-            </p>
-            <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.045em] text-mist-100 sm:text-5xl">
-              Projects measured in evidence,
-              <span className="text-mist-600"> not adjectives.</span>
+            <h2 className="section-title">
+              A growing record of things built and measured.
             </h2>
-          </div>
-
-          <div
-            className="flex flex-wrap gap-2"
-            aria-label="Filter projects by category"
-          >
-            {projectCategories.map((category) => {
-              const isActive = category === activeCategory;
-
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  aria-pressed={isActive}
-                  onClick={() => setActiveCategory(category)}
-                  className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors ${
-                    isActive
-                      ? "border-terminal/40 bg-terminal/10 text-terminal"
-                      : "border-white/10 bg-white/[0.025] text-mist-600 hover:border-terminal/20 hover:text-mist-100"
-                  }`}
-                >
-                  {category}
-                </button>
-              );
-            })}
+            <p className="section-copy">
+              Each branch follows a project from constraint to evidence:
+              embedded control, parallel compute, and computer vision.
+            </p>
           </div>
         </div>
 
-        <motion.div layout className="mt-12 grid gap-5 lg:grid-cols-3">
-          <AnimatePresence initial={false} mode="popLayout">
-            {visibleProjects.map((project, index) => (
-              <motion.article
-                layout
-                key={project.id}
-                initial={false}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{
-                  duration: 0.28,
-                  delay: index * 0.04,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="glass-card group flex min-h-[36rem] flex-col overflow-hidden transition-colors hover:border-terminal/20"
+        <div ref={treeRef} className="project-tree">
+          <div className="project-tree-trunk" aria-hidden="true">
+            <TreeSvg />
+            <div ref={growthRef} className="project-tree-growth">
+              <TreeSvg progress />
+            </div>
+          </div>
+
+          {projects.map((project, index) => (
+            <div className="project-row" key={project.id}>
+              <div className="project-branch" aria-hidden="true" />
+              <div className="project-node" aria-hidden="true">
+                <span>0{index + 1}</span>
+              </div>
+
+              <Link
+                href={`/projects/${project.id}`}
+                className="project-card"
+                aria-label={`Read about ${project.title}`}
+                onPointerEnter={cacheCardBounds}
+                onPointerMove={handleCardPointerMove}
+                onPointerLeave={resetCardTilt}
               >
-                <div className="relative aspect-[16/9] overflow-hidden border-b border-white/[0.07] bg-forest-950/50">
+                <div className="project-image">
                   <Image
                     src={project.image}
                     alt={project.imageAlt}
@@ -96,80 +188,39 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                     loading="lazy"
                     decoding="async"
                     unoptimized
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover opacity-75 transition duration-500 group-hover:scale-[1.025] group-hover:opacity-95"
+                    sizes="(min-width: 901px) 42vw, 82vw"
                   />
                 </div>
 
-                <div className="flex items-start justify-between gap-5 px-6 pt-6">
-                  <div className="flex flex-wrap gap-2">
-                    {project.categories.map((category) => (
-                      <span
-                        key={category}
-                        className="rounded-full border border-terminal/15 bg-terminal/[0.04] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] text-terminal/80"
+                <div className="project-card-body">
+                  <div className="project-meta">
+                    <span>{project.categories.join(" / ")}</span>
+                    <span>{project.period}</span>
+                  </div>
+
+                  <h3>{project.title}</h3>
+                  <p className="project-card-summary">{project.summary}</p>
+
+                  <div className="project-metrics">
+                    {project.metrics.slice(0, 2).map((metric) => (
+                      <div
+                        className="project-metric"
+                        key={`${project.id}-${metric.label}`}
                       >
-                        {category}
-                      </span>
+                        <strong>{metric.value}</strong>
+                        <span>{metric.label}</span>
+                      </div>
                     ))}
                   </div>
-                  <span className="font-mono text-[10px] text-mist-600">
-                    0{index + 1}
+
+                  <span className="project-link">
+                    View project <span aria-hidden="true">↗</span>
                   </span>
                 </div>
-
-                <div className="mt-8 px-6">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mist-600">
-                    {project.period}
-                  </p>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-mist-100">
-                    {project.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-mist-300">
-                    {project.summary}
-                  </p>
-                </div>
-
-                <div className="mt-7 grid grid-cols-2 gap-2 px-6">
-                  {project.metrics.slice(0, 2).map((metric) => (
-                    <div
-                      key={`${project.id}-${metric.label}`}
-                      className="rounded-xl border border-white/[0.06] bg-forest-950/35 p-3"
-                    >
-                      <p className="font-mono text-lg font-semibold text-terminal">
-                        {metric.value}
-                      </p>
-                      <p className="mt-1 text-[10px] leading-4 text-mist-600">
-                        {metric.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-auto px-6 pb-6 pt-8">
-                  <div className="mb-5 flex flex-wrap gap-x-3 gap-y-2 font-mono text-[9px] uppercase tracking-[0.1em] text-mist-600">
-                    {project.technologies.slice(0, 4).map((technology) => (
-                      <span key={technology}>{technology}</span>
-                    ))}
-                  </div>
-                  <Link
-                    href={`/projects/${project.id}`}
-                    className="flex items-center justify-between border-t border-white/[0.07] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-mist-300 transition-colors group-hover:text-terminal"
-                  >
-                    Read technical brief
-                    <span aria-hidden="true">-&gt;</span>
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        <p
-          className="mt-6 font-mono text-[10px] uppercase tracking-[0.12em] text-mist-600"
-          aria-live="polite"
-        >
-          Showing {visibleProjects.length} of {projects.length} projects
-        </p>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

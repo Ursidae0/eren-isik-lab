@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 
+import { ContactSection } from "@/components/contact-section";
 import { Footer } from "@/components/footer";
 import { ForestBackdrop } from "@/components/forest-backdrop";
 import { Hero } from "@/components/hero";
-import { MissionControl } from "@/components/mission-control";
+import { LeafField } from "@/components/leaf-field";
 import { Navigation } from "@/components/navigation";
 import { ProfileSnapshot } from "@/components/profile-snapshot";
 import { ProjectGallery } from "@/components/project-gallery";
-import { RainCanvas } from "@/components/rain-canvas";
-import { ResumeSection } from "@/components/resume-section";
 import { projects } from "@/lib/projects";
 import { siteConfig } from "@/lib/site";
 
@@ -65,22 +64,19 @@ export default function Home() {
   };
 
   return (
-    <div id="top" className="site-shell relative isolate min-h-screen overflow-hidden">
+    <div className="site-shell">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <ForestBackdrop />
-      <RainCanvas />
+      <LeafField />
       <Navigation />
       <main>
         <Hero />
-        <div className="render-lazy">
-          <ProjectGallery projects={projects} />
-        </div>
+        <ProjectGallery projects={projects} />
         <ProfileSnapshot />
-        <ResumeSection />
-        <MissionControl />
+        <ContactSection />
       </main>
       <Footer />
     </div>

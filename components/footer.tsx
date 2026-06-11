@@ -1,13 +1,18 @@
+import { siteConfig } from "@/lib/site";
+
 export function Footer() {
   return (
-    <footer
-      className="relative z-20 border-t border-white/[0.06] px-6 py-8"
-    >
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 font-mono text-[11px] tracking-[0.12em] text-mist-600 sm:flex-row sm:items-center sm:justify-between">
-        <p>EREN ISIK LAB / ISTANBUL</p>
-        <p>
-          BUILT FOR THE EDGE <span className="text-terminal">_</span>
-        </p>
+    <footer className="site-footer">
+      <div className="site-footer-inner">
+        <p>© {new Date().getFullYear()} Eren Isik</p>
+        <div className="flex gap-5">
+          <a href={siteConfig.github} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+          <a href={siteConfig.linkedin} target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+        </div>
       </div>
     </footer>
   );
