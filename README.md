@@ -1,6 +1,6 @@
 # Eren Isik Lab
 
-A production-ready Next.js App Router starter for
+A nature-led engineering portfolio for
 [erenisiklab.com](https://erenisiklab.com), packaged for Docker and exposed
 through a Cloudflare Tunnel.
 
@@ -8,7 +8,7 @@ through a Cloudflare Tunnel.
 
 - Next.js App Router and TypeScript
 - Tailwind CSS
-- Framer Motion
+- Canvas-based ambient animation
 - Docker Compose
 - Cloudflare Tunnel
 
@@ -60,6 +60,10 @@ sudo bash scripts/install-docker-ubuntu.sh
 
 Cloudflare manages the DNS record when the public hostname is saved.
 
+The local atmosphere needs Cloudflare's **Add visitor location headers**
+Managed Transform. Enable that transform for the zone so the origin receives
+`cf-iplatitude`, `cf-iplongitude`, `cf-ipcity`, and `cf-ipcountry`.
+
 ## 3. Configure the Deployment
 
 Create the local environment file:
@@ -96,10 +100,21 @@ When both services are healthy, visit:
 https://erenisiklab.com
 ```
 
-The Cyber-Nature landing page should load with the project gallery, resume
-download, and Mission Control terminal.
+The landing page should load with the forest hero, growing project timeline,
+contextual resume link, and Atmosphere control.
 
-## Mission Control Email Delivery
+## Local Atmosphere
+
+The default **Local** setting follows the visitor's daylight, weather, and
+wind. The server rounds Cloudflare coordinates to one decimal place, caches
+conditions for 20 minutes, and never returns coordinates or an IP address to
+the browser. Browser geolocation is not requested.
+
+When location headers or the weather service are unavailable, the design
+falls back to the visitor's browser clock. Visitors can select **Default** to
+use the original forest or **Off** to remove ambient particles.
+
+## Contact Email Delivery
 
 The contact API works in simulation mode without additional configuration.
 To deliver messages by email, create a Resend API key and add these values to
@@ -127,6 +142,9 @@ docker compose \
 
 Then open `http://localhost:3000`.
 
+Direct localhost requests do not include Cloudflare location headers, so the
+Atmosphere control will use its browser-time fallback.
+
 To use a different port, set `LOCAL_PORT` for the command:
 
 ```bash
@@ -143,6 +161,23 @@ docker compose \
   -f docker-compose.yml \
   -f docker-compose.local.yml \
   down
+```
+
+## Docker Tests
+
+Run unit tests without installing Node dependencies on the host:
+
+```bash
+docker build --target test -t eren-isik-lab-test .
+```
+
+After building the production image, run the deterministic ambient integration
+test. It starts a temporary mock weather service, production frontend, and
+probe on an isolated Docker network:
+
+```bash
+docker compose build frontend
+scripts/test-ambient-integration.sh
 ```
 
 ## Operations

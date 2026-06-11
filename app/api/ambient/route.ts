@@ -57,7 +57,7 @@ export async function GET(request: Request) {
   }
 
   const endpoint = new URL(
-    process.env.AMBIENT_WEATHER_ENDPOINT ?? DEFAULT_WEATHER_ENDPOINT,
+    process.env.AMBIENT_WEATHER_ENDPOINT || DEFAULT_WEATHER_ENDPOINT,
   );
   const parameters = {
     latitude: location.latitude.toFixed(1),
