@@ -10,6 +10,7 @@ export const ambientPhases = ["dawn", "day", "dusk", "night"] as const;
 
 export type AmbientWeatherMode = (typeof ambientWeatherModes)[number];
 export type AmbientPhase = (typeof ambientPhases)[number];
+export type AmbientPreference = "local" | "default" | "off";
 
 export type AmbientConditions = {
   available: boolean;
@@ -70,6 +71,54 @@ export const defaultAmbientConditions: AmbientConditions = {
   observedAt: null,
   locationLabel: null,
 };
+
+export function resolveAmbientPresentation(
+  preference: AmbientPreference,
+  conditions: AmbientConditions,
+  browserPhase: AmbientPhase,
+) {
+  if (preference === "off") {
+    return {
+      phase: "default" as const,
+      weather: "clear" as const,
+      particlesEnabled: false,
+    };
+  }
+
+  if (preference === "default") {
+    return {
+      phase: "default" as const,
+      weather: "clear" as const,
+      particlesEnabled: true,
+    };
+  }
+
+  return {
+    phase: conditions.available ? conditions.phase : browserPhase,
+    weather: conditions.available ? conditions.weather : ("clear" as const),
+    particlesEnabled: true,
+  };
+}
+
+export function isAmbientConditions(value: unknown): value is AmbientConditions {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<AmbientConditions>;
+  return (
+    typeof candidate.available === "boolean" &&
+    (candidate.source === "local" || candidate.source === "fallback") &&
+    ambientWeatherModes.includes(candidate.weather as AmbientWeatherMode) &&
+    ambientPhases.includes(candidate.phase as AmbientPhase) &&
+    typeof candidate.isDay === "boolean" &&
+    typeof candidate.windSpeedKmh === "number" &&
+    typeof candidate.windDirectionDeg === "number" &&
+    typeof candidate.windGustKmh === "number" &&
+    typeof candidate.precipitationMm === "number" &&
+    typeof candidate.cloudCoverPercent === "number"
+  );
+}
 
 function finiteNumber(value: unknown, fallback: number) {
   return typeof value === "number" && Number.isFinite(value)

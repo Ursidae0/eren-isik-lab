@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { AmbientProvider } from "@/components/ambient-provider";
 import { siteConfig } from "@/lib/site";
 
 import "@fontsource-variable/jetbrains-mono";
@@ -49,7 +50,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <AmbientProvider>{children}</AmbientProvider>
+      </body>
     </html>
   );
 }

@@ -5,9 +5,11 @@ import {
   getAmbientPhase,
   getBrowserTimePhase,
   getLocationCacheKey,
+  isAmbientConditions,
   normalizeOpenMeteoResponse,
   normalizeWeatherCode,
   readCoarseLocation,
+  resolveAmbientPresentation,
 } from "../lib/ambient.ts";
 
 test("reads and rounds Cloudflare coordinates without retaining an IP", () => {
@@ -141,4 +143,40 @@ test("normalizes a weather response without exposing coordinates", () => {
   });
   assert.equal("latitude" in conditions, false);
   assert.equal("longitude" in conditions, false);
+  assert.equal(isAmbientConditions(conditions), true);
+  assert.equal(isAmbientConditions({ weather: "clear" }), false);
+});
+
+test("resolves local, default, and off presentation modes", () => {
+  const fallback = {
+    available: false,
+    source: "fallback" as const,
+    weather: "clear" as const,
+    phase: "day" as const,
+    isDay: true,
+    temperatureC: null,
+    windSpeedKmh: 8,
+    windDirectionDeg: 260,
+    windGustKmh: 12,
+    precipitationMm: 0,
+    cloudCoverPercent: 20,
+    observedAt: null,
+    locationLabel: null,
+  };
+
+  assert.deepEqual(resolveAmbientPresentation("local", fallback, "dusk"), {
+    phase: "dusk",
+    weather: "clear",
+    particlesEnabled: true,
+  });
+  assert.deepEqual(resolveAmbientPresentation("default", fallback, "night"), {
+    phase: "default",
+    weather: "clear",
+    particlesEnabled: true,
+  });
+  assert.deepEqual(resolveAmbientPresentation("off", fallback, "night"), {
+    phase: "default",
+    weather: "clear",
+    particlesEnabled: false,
+  });
 });

@@ -1,3 +1,5 @@
+import { AtmosphereControl } from "@/components/atmosphere-control";
+
 const links = [
   { label: "Work", href: "/#projects" },
   { label: "About", href: "/#about" },
@@ -19,6 +21,8 @@ export function Navigation() {
             </a>
           ))}
         </div>
+
+        <AtmosphereControl />
       </nav>
     </header>
   );
