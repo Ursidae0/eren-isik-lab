@@ -115,15 +115,35 @@ The sender domain used by `CONTACT_FROM_EMAIL` must be verified in Resend.
 
 ## Local Docker Check
 
-The production Compose file deliberately publishes no host ports. To test the
-image directly before configuring Cloudflare:
+The production Compose file deliberately publishes no host ports. Use the
+local override to bind the frontend to the host without starting Cloudflared:
 
 ```bash
-docker build -t eren-isik-lab .
-docker run --rm -p 3000:3000 eren-isik-lab
+docker compose \
+  -f docker-compose.yml \
+  -f docker-compose.local.yml \
+  up -d --build frontend
 ```
 
 Then open `http://localhost:3000`.
+
+To use a different port, set `LOCAL_PORT` for the command:
+
+```bash
+LOCAL_PORT=8080 docker compose \
+  -f docker-compose.yml \
+  -f docker-compose.local.yml \
+  up -d --build frontend
+```
+
+Stop the local stack with:
+
+```bash
+docker compose \
+  -f docker-compose.yml \
+  -f docker-compose.local.yml \
+  down
+```
 
 ## Operations
 
