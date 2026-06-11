@@ -176,6 +176,7 @@ textarea:focus-visible {
 .forest-backdrop::before {
   position: absolute;
   inset: 0;
+  z-index: 0;
   content: "";
   background-image: url("/images/forest-hero.webp");
   background-position: center;
@@ -191,6 +192,7 @@ textarea:focus-visible {
 .forest-backdrop::after {
   position: absolute;
   inset: 0;
+  z-index: 2;
   content: "";
   background:
     linear-gradient(
@@ -208,9 +210,60 @@ textarea:focus-visible {
   transition: background 1600ms ease;
 }
 
+.forest-weather {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background: transparent;
+  transition:
+    opacity 1400ms ease,
+    background-color 1400ms ease;
+}
+
+:root[data-ambient-weather="cloudy"] .forest-weather {
+  opacity: 0.28;
+  background:
+    linear-gradient(180deg, rgb(117 130 124 / 42%), transparent 54%),
+    rgb(54 67 61 / 18%);
+}
+
+:root[data-ambient-weather="fog"] .forest-weather {
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at 72% 34%, rgb(221 225 213 / 48%), transparent 35%),
+    linear-gradient(
+      180deg,
+      rgb(202 211 202 / 44%),
+      rgb(174 188 178 / 22%) 55%,
+      transparent
+    );
+}
+
+:root[data-ambient-weather="rain"] .forest-weather {
+  opacity: 0.42;
+  background: linear-gradient(
+    180deg,
+    rgb(49 67 69 / 48%),
+    rgb(31 49 46 / 16%) 58%,
+    transparent
+  );
+}
+
+:root[data-ambient-weather="snow"] .forest-weather {
+  opacity: 0.48;
+  background: linear-gradient(
+    180deg,
+    rgb(220 229 222 / 52%),
+    rgb(194 207 199 / 22%) 62%,
+    transparent
+  );
+}
+
 .forest-grain {
   position: absolute;
   inset: 0;
+  z-index: 3;
   opacity: 0.15;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
   mix-blend-mode: soft-light;

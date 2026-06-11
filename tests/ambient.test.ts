@@ -5,6 +5,8 @@ import {
   getAmbientPhase,
   getBrowserTimePhase,
   getLocationCacheKey,
+  getParticleProfile,
+  getWindVector,
   isAmbientConditions,
   normalizeOpenMeteoResponse,
   normalizeWeatherCode,
@@ -179,4 +181,36 @@ test("resolves local, default, and off presentation modes", () => {
     weather: "clear",
     particlesEnabled: false,
   });
+});
+
+test("converts meteorological wind direction into screen movement", () => {
+  const fromWest = getWindVector(270, 35);
+  const fromNorth = getWindVector(0, 17.5);
+
+  assert.ok(fromWest.x > 0.99);
+  assert.ok(Math.abs(fromWest.y) < 0.001);
+  assert.ok(Math.abs(fromNorth.x) < 0.001);
+  assert.ok(fromNorth.y > 0.49);
+});
+
+test("keeps precipitation effects restrained and weather-specific", () => {
+  assert.deepEqual(getParticleProfile("clear", 0, 12), {
+    leafFactor: 1,
+    rainDensity: 0,
+    snowDensity: 0,
+    turbulence: 12 / 45,
+  });
+
+  const rain = getParticleProfile("rain", 8, 90);
+  assert.deepEqual(rain, {
+    leafFactor: 0.58,
+    rainDensity: 46,
+    snowDensity: 0,
+    turbulence: 1.35,
+  });
+
+  const snow = getParticleProfile("snow", 1, 18);
+  assert.equal(snow.rainDensity, 0);
+  assert.equal(snow.snowDensity, 19);
+  assert.ok(snow.turbulence < rain.turbulence);
 });

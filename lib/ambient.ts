@@ -12,6 +12,13 @@ export type AmbientWeatherMode = (typeof ambientWeatherModes)[number];
 export type AmbientPhase = (typeof ambientPhases)[number];
 export type AmbientPreference = "local" | "default" | "off";
 
+export type AmbientParticleProfile = {
+  leafFactor: number;
+  rainDensity: number;
+  snowDensity: number;
+  turbulence: number;
+};
+
 export type AmbientConditions = {
   available: boolean;
   source: "local" | "fallback";
@@ -71,6 +78,55 @@ export const defaultAmbientConditions: AmbientConditions = {
   observedAt: null,
   locationLabel: null,
 };
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+export function getWindVector(directionDeg: number, speedKmh: number) {
+  const towardRadians = ((directionDeg + 180) * Math.PI) / 180;
+  const strength = clamp(speedKmh / 35, 0, 1.4);
+
+  return {
+    x: Math.sin(towardRadians) * strength,
+    y: -Math.cos(towardRadians) * strength,
+    strength,
+  };
+}
+
+export function getParticleProfile(
+  weather: AmbientWeatherMode,
+  precipitationMm: number,
+  windGustKmh: number,
+): AmbientParticleProfile {
+  const precipitation = clamp(precipitationMm, 0, 4);
+  const turbulence = clamp(windGustKmh / 45, 0.18, 1.35);
+
+  if (weather === "rain") {
+    return {
+      leafFactor: 0.58,
+      rainDensity: Math.round(14 + precipitation * 8),
+      snowDensity: 0,
+      turbulence,
+    };
+  }
+
+  if (weather === "snow") {
+    return {
+      leafFactor: 0.38,
+      rainDensity: 0,
+      snowDensity: Math.round(13 + precipitation * 6),
+      turbulence: turbulence * 0.7,
+    };
+  }
+
+  return {
+    leafFactor: weather === "fog" ? 0.72 : 1,
+    rainDensity: 0,
+    snowDensity: 0,
+    turbulence,
+  };
+}
 
 export function resolveAmbientPresentation(
   preference: AmbientPreference,
