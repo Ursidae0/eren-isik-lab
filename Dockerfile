@@ -19,6 +19,14 @@ COPY . .
 
 RUN npm run build
 
+FROM dependencies AS test
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm test
+
 FROM ${NODE_IMAGE} AS runner
 
 WORKDIR /app
