@@ -2,18 +2,21 @@ export function Hero() {
   return (
     <section id="top" className="hero">
       <div className="hero-inner">
-        <p className="eyebrow">Robotics and GPU systems engineer</p>
+        <p className="eyebrow">Embedded · Signal Processing · Simulation · GPU</p>
 
         <h1>
-          Building systems
+          Where software meets
           <br />
-          that <em>move.</em>
+          the <em>physical world.</em>
         </h1>
 
         <div className="hero-summary">
           <p>
-            I design high-performance software where code meets the physical
-            world, from real-time rover control to CUDA kernels and edge AI.
+            I design and build systems at the boundary of software and
+            hardware — real-time embedded control, signal processing and
+            machine learning, numerical simulation, and GPU-accelerated
+            computing. Computer engineering student at Izmir Institute of
+            Technology, focused on measured results and honest evaluation.
           </p>
 
           <div className="button-row">

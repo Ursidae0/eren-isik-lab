@@ -72,17 +72,36 @@ export function ContactSection() {
           <p className="section-kicker">Contact</p>
           <h2 className="contact-title">Let&apos;s build something useful.</h2>
           <p className="contact-copy">
-            I am open to engineering roles, research collaborations, and
-            projects involving robotics, CUDA, or edge systems.
+            I&apos;m open to internships, engineering roles, and research
+            collaborations — especially where software meets embedded systems,
+            signal processing, simulation, or high-performance computing.
           </p>
-          <a
-            href={siteConfig.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="contact-direct"
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "0.75rem",
+              marginTop: "2rem",
+            }}
           >
-            Find me on LinkedIn ↗
-          </a>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              className="contact-direct"
+              style={{ marginTop: 0 }}
+            >
+              {siteConfig.email} ↗
+            </a>
+            <a
+              href={siteConfig.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="contact-direct"
+              style={{ marginTop: 0 }}
+            >
+              Find me on LinkedIn ↗
+            </a>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="contact-form">

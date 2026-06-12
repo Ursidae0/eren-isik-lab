@@ -2,9 +2,10 @@ import { education, experience, technicalSkills } from "@/lib/projects";
 
 const featuredSkills = [
   ...technicalSkills.programming,
+  "NumPy",
+  "SciPy",
+  "scikit-learn",
   "ROS 2",
-  "TensorRT",
-  "OpenCV",
   "Raspberry Pi Pico",
   "Docker",
 ];
@@ -22,10 +23,15 @@ export function ProfileSnapshot() {
             I like difficult constraints and tangible outcomes.
           </h2>
           <p className="profile-copy">
-            I am a computer engineering student in Türkiye focused on robotics,
-            GPU performance, and embedded systems. My work moves between
-            low-level control, hardware-aware optimization, and practical
-            computer vision, always with measured results.
+            I am a computer engineering student at Izmir Institute of
+            Technology, drawn to problems where software has to respect
+            physics, timing, and noisy real-world data. My work spans real-time
+            embedded firmware, signal processing and machine learning,
+            numerical simulation, and GPU and parallel computing. Recently I
+            rewrote our TEKNOFEST rover&apos;s drive firmware into a 1 kHz
+            real-time control loop, and built leakage-safe ML and physics-based
+            simulations on the software side. I care about measured results and
+            honest evaluation more than big-sounding numbers.
           </p>
           <a
             href="/eren-isik-resume-2026.pdf"
