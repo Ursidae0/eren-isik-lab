@@ -159,7 +159,7 @@
       "title": "Mortar Ballistic Simulation",
       "image": "/projects/mortar-ballistic-simulation.svg",
       "imageAlt": "Parabolic mortar trajectory arc over a ranging grid",
-      "subtitle": "C physics engine behind a FastAPI service and canvas frontend",
+      "subtitle": "Educational exterior-ballistics demo: RK4 C engine, FastAPI, canvas",
       "period": "April 2026",
       "categories": [
         "Simulation",
@@ -175,7 +175,7 @@
         "JavaScript"
       ],
       "repository": "https://github.com/Ursidae0/MortarSimulation",
-      "summary": "A physically accurate mortar ballistics simulator. A C engine integrates the projectile state with 4th-order Runge-Kutta under quadratic drag, configurable wind, and a humidity-corrected International Standard Atmosphere, exposed through a FastAPI service (the C library loaded via ctypes) with a canvas trajectory frontend. C unit tests and API tests gate the containerized build.",
+      "summary": "An educational exterior-ballistics simulator for a generic 60 mm-class projectile, built to practice numerical methods and physical modeling. A C engine integrates the point-mass trajectory with 4th-order Runge-Kutta under quadratic drag, configurable wind, and a humidity-corrected International Standard Atmosphere, exposed through a FastAPI service (the C library loaded via ctypes) with a canvas trajectory frontend. C unit tests and API tests gate the containerized build. It uses textbook physics and public parameters only, with no operational, targeting, or fire-control use.",
       "metrics": [
         {
           "value": "RK4",
@@ -201,6 +201,10 @@
         "Containerized the stack so the C unit tests and Python API tests run during the image build, with GitHub Actions CI on every push."
       ],
       "technicalSpecs": [
+        {
+          "label": "Scope",
+          "value": "Educational; generic 60 mm-class; no operational use"
+        },
         {
           "label": "Physics core",
           "value": "C: RK4 integrator, ISA atmosphere, quadratic drag"
