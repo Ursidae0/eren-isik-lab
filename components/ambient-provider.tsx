@@ -13,52 +13,26 @@ import {
   defaultAmbientConditions,
   getBrowserTimePhase,
   isAmbientConditions,
-  resolveAmbientPresentation,
   type AmbientConditions,
-  type AmbientPreference,
 } from "@/lib/ambient";
 
 type AmbientStatus = "loading" | "live" | "fallback";
 
 type AmbientContextValue = {
   conditions: AmbientConditions;
-  preference: AmbientPreference;
-  setPreference: (preference: AmbientPreference) => void;
   status: AmbientStatus;
 };
 
-const STORAGE_KEY = "eren-isik-atmosphere";
 const REFRESH_INTERVAL_MS = 20 * 60 * 1000;
-
 const AmbientContext = createContext<AmbientContextValue | null>(null);
 
-function isAmbientPreference(value: string | null): value is AmbientPreference {
-  return value === "local" || value === "default" || value === "off";
-}
-
 export function AmbientProvider({ children }: { children: ReactNode }) {
-  const [preference, setPreferenceState] =
-    useState<AmbientPreference>("local");
   const [conditions, setConditions] = useState<AmbientConditions>(
     defaultAmbientConditions,
   );
   const [status, setStatus] = useState<AmbientStatus>("loading");
-  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const storedPreference = window.localStorage.getItem(STORAGE_KEY);
-    if (isAmbientPreference(storedPreference)) {
-      setPreferenceState(storedPreference);
-    }
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated || preference !== "local") {
-      setStatus("fallback");
-      return;
-    }
-
     const controller = new AbortController();
     let active = true;
 
@@ -82,8 +56,16 @@ export function AmbientProvider({ children }: { children: ReactNode }) {
           throw new Error("Invalid ambient response");
         }
 
-        setConditions(payload);
-        setStatus(payload.available ? "live" : "fallback");
+        if (payload.available) {
+          setConditions(payload);
+          setStatus("live");
+        } else {
+          setConditions({
+            ...defaultAmbientConditions,
+            phase: getBrowserTimePhase(),
+          });
+          setStatus("fallback");
+        }
       } catch (error) {
         if (
           !active ||
@@ -115,41 +97,21 @@ export function AmbientProvider({ children }: { children: ReactNode }) {
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [hydrated, preference]);
+  }, []);
 
   useEffect(() => {
-    if (!hydrated) {
-      return;
-    }
-
     const root = document.documentElement;
-    const presentation = resolveAmbientPresentation(
-      preference,
-      conditions,
-      getBrowserTimePhase(),
-    );
-
-    root.dataset.atmosphere = preference;
-    root.dataset.ambientPhase = presentation.phase;
-    root.dataset.ambientWeather = presentation.weather;
-    root.dataset.ambientParticles = presentation.particlesEnabled
-      ? "on"
-      : "off";
-  }, [conditions, hydrated, preference]);
-
-  const setPreference = (nextPreference: AmbientPreference) => {
-    setPreferenceState(nextPreference);
-    window.localStorage.setItem(STORAGE_KEY, nextPreference);
-  };
+    root.dataset.ambientPhase = conditions.phase;
+    root.dataset.ambientWeather = conditions.weather;
+    root.dataset.ambientSeason = conditions.season;
+  }, [conditions]);
 
   const value = useMemo(
     () => ({
       conditions,
-      preference,
-      setPreference,
       status,
     }),
-    [conditions, preference, status],
+    [conditions, status],
   );
 
   return (

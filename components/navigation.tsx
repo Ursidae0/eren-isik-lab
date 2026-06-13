@@ -1,4 +1,4 @@
-import { AtmosphereControl } from "@/components/atmosphere-control";
+import { AtmosphereStatus } from "@/components/atmosphere-control";
 
 const links = [
   { label: "Work", href: "/#projects" },
@@ -22,7 +22,7 @@ export function Navigation() {
           ))}
         </div>
 
-        <AtmosphereControl />
+        <AtmosphereStatus />
       </nav>
     </header>
   );
