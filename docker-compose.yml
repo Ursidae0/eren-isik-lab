@@ -38,6 +38,9 @@ services:
       - ALL
     pids_limit: 200
     stop_grace_period: 20s
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     networks:
       - edge
 
@@ -56,6 +59,9 @@ services:
       - ALL
     pids_limit: 100
     stop_grace_period: 20s
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     networks:
       - edge
 

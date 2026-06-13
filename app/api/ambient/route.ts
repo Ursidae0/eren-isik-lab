@@ -11,7 +11,8 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const WEATHER_TIMEOUT_MS = 3500;
+const WEATHER_TIMEOUT_MS = 8000;
+const WEATHER_FETCH_ATTEMPTS = 2;
 const DEFAULT_WEATHER_ENDPOINT =
   "https://api.open-meteo.com/v1/forecast";
 
@@ -84,33 +85,41 @@ export async function GET(request: Request) {
     endpoint.searchParams.set(key, value);
   }
 
-  try {
-    const response = await fetch(endpoint, {
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "erenisiklab.com ambient weather",
-      },
-      signal: AbortSignal.timeout(WEATHER_TIMEOUT_MS),
-    });
+  let payload: OpenMeteoResponse | null = null;
+  for (let attempt = 0; attempt < WEATHER_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(endpoint, {
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "erenisiklab.com ambient weather",
+        },
+        signal: AbortSignal.timeout(WEATHER_TIMEOUT_MS),
+      });
 
-    if (!response.ok) {
-      return fallbackResponse("weather_unavailable");
+      if (response.ok) {
+        payload = (await response.json()) as OpenMeteoResponse;
+        break;
+      }
+    } catch {
+      // Network error or timeout — retry once before falling back. Open-Meteo
+      // reached over the home link can be slow to answer on a cold connection.
     }
+  }
 
-    const payload = (await response.json()) as OpenMeteoResponse;
-    const conditions = normalizeOpenMeteoResponse(payload, location);
-    ambientCache.set(cacheKey, {
-      expiresAt: now + CACHE_TTL_MS,
-      value: conditions,
-    });
-
-    return Response.json(conditions, {
-      headers: {
-        "Cache-Control": "private, max-age=300",
-        "X-Ambient-Cache": "miss",
-      },
-    });
-  } catch {
+  if (!payload) {
     return fallbackResponse("weather_unavailable");
   }
+
+  const conditions = normalizeOpenMeteoResponse(payload, location);
+  ambientCache.set(cacheKey, {
+    expiresAt: now + CACHE_TTL_MS,
+    value: conditions,
+  });
+
+  return Response.json(conditions, {
+    headers: {
+      "Cache-Control": "private, max-age=300",
+      "X-Ambient-Cache": "miss",
+    },
+  });
 }
