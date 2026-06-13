@@ -18,6 +18,8 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       CONTACT_TO_EMAIL: ${CONTACT_TO_EMAIL:-}
       CONTACT_FROM_EMAIL: ${CONTACT_FROM_EMAIL:-}
+      CF_ACCOUNT_ID: ${CF_ACCOUNT_ID:-}
+      CF_EMAIL_TOKEN: ${CF_EMAIL_TOKEN:-}
     healthcheck:
       test:
         [

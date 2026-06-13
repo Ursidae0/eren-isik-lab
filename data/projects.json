@@ -155,6 +155,83 @@
       ]
     },
     {
+      "id": "mortar-ballistic-simulation",
+      "title": "Mortar Ballistic Simulation",
+      "image": "/projects/mortar-ballistic-simulation.svg",
+      "imageAlt": "Parabolic mortar trajectory arc over a ranging grid",
+      "subtitle": "Educational exterior-ballistics demo: RK4 C engine, FastAPI, canvas",
+      "period": "April 2026",
+      "categories": [
+        "Simulation",
+        "Systems"
+      ],
+      "technologies": [
+        "C",
+        "Python",
+        "FastAPI",
+        "ctypes",
+        "CMake",
+        "Docker",
+        "JavaScript"
+      ],
+      "repository": "https://github.com/Ursidae0/MortarSimulation",
+      "summary": "An educational exterior-ballistics simulator for a generic 60 mm-class projectile, built to practice numerical methods and physical modeling. A C engine integrates the point-mass trajectory with 4th-order Runge-Kutta under quadratic drag, configurable wind, and a humidity-corrected International Standard Atmosphere, exposed through a FastAPI service (the C library loaded via ctypes) with a canvas trajectory frontend. C unit tests and API tests gate the containerized build. It uses textbook physics and public parameters only, with no operational, targeting, or fire-control use.",
+      "metrics": [
+        {
+          "value": "RK4",
+          "label": "trajectory integrator",
+          "context": "4th-order Runge-Kutta over the [x, y, z, vx, vy, vz] state vector, with steps down to 1 ms and ground impact interpolated to y=0."
+        },
+        {
+          "value": "10",
+          "label": "simulation inputs",
+          "context": "Muzzle velocity, elevation, azimuth, mass, calibre, drag coefficient, launch altitude, wind speed and direction, and humidity."
+        },
+        {
+          "value": "C + Python",
+          "label": "engine and API",
+          "context": "C physics core compiled to a shared library, loaded via ctypes into a FastAPI service with a vanilla-JS canvas frontend."
+        }
+      ],
+      "highlights": [
+        "Wrote the physics core in C: an RK4 integrator over the [x, y, z, vx, vy, vz] state vector with ground impact interpolated to y=0.",
+        "Modeled air density with the International Standard Atmosphere troposphere, corrected for humidity, and applied quadratic drag relative to a configurable wind.",
+        "Compiled the engine to a shared library and bridged it into a FastAPI POST /api/simulate endpoint via ctypes, with Pydantic-validated inputs.",
+        "Built a vanilla HTML/CSS/JS canvas frontend that renders the trajectory and reports range, apex, time of flight, impact velocity and angle, and lateral drift.",
+        "Containerized the stack so the C unit tests and Python API tests run during the image build, with GitHub Actions CI on every push."
+      ],
+      "technicalSpecs": [
+        {
+          "label": "Scope",
+          "value": "Educational; generic 60 mm-class; no operational use"
+        },
+        {
+          "label": "Physics core",
+          "value": "C: RK4 integrator, ISA atmosphere, quadratic drag"
+        },
+        {
+          "label": "State vector",
+          "value": "[x, y, z, vx, vy, vz] integrated at up to 1 ms steps"
+        },
+        {
+          "label": "API",
+          "value": "FastAPI with a ctypes bridge to libmortar_physics.so"
+        },
+        {
+          "label": "Frontend",
+          "value": "Vanilla HTML/CSS/JS canvas trajectory renderer"
+        },
+        {
+          "label": "Outputs",
+          "value": "Range, apex, time of flight, impact velocity/angle, drift"
+        },
+        {
+          "label": "Build and CI",
+          "value": "Docker multi-stage; C + Python tests gate the build; GitHub Actions"
+        }
+      ]
+    },
+    {
       "id": "sparse-gpu-kernels",
       "title": "Sparse GPU Kernels",
       "image": "/projects/sparse-gpu-kernels.svg",

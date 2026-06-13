@@ -79,6 +79,25 @@ CONTACT_FROM_EMAIL="Eren Isik Lab <contact@erenisiklab.com>"
 Secrets are read by Docker Compose at runtime. They are excluded from the build
 context and are not embedded in the frontend image.
 
+### Alternative: Cloudflare Email Service (beta)
+
+Instead of Resend you can deliver through Cloudflare Email Service. It is free
+when `CONTACT_TO_EMAIL` is a verified destination already configured in
+Cloudflare Email Routing. Leave `RESEND_API_KEY` empty (Resend takes precedence
+when both are set) and instead set:
+
+```dotenv
+CF_ACCOUNT_ID=your-cloudflare-account-id
+CF_EMAIL_TOKEN=your-email-sending-api-token
+CONTACT_TO_EMAIL=your-verified-inbox@example.com
+CONTACT_FROM_EMAIL="Eren Isik Lab <contact@erenisiklab.com>"
+```
+
+This requires the domain onboarded for email sending (MX/SPF/DKIM/DMARC) in
+Cloudflare. Because the form only notifies your own verified inbox, it stays on
+the free verified-destination path. With neither provider configured, the API
+remains in simulation mode.
+
 ## 5. Validate the Compose Configuration
 
 Render the resolved configuration before starting:

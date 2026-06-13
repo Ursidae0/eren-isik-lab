@@ -7,6 +7,8 @@ export const projectCategories = [
   "Computer Vision",
   "Signal Processing",
   "Machine Learning",
+  "Simulation",
+  "Systems",
 ] as const;
 
 export type ProjectCategory = (typeof projectCategories)[number];

@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import {
+  buildEnvelope,
+  deliver,
+  parseSubmission,
+  type ProviderConfig,
+} from "@/lib/contact";
+
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 5;
 
@@ -24,10 +30,7 @@ function isRateLimited(address: string) {
   const entry = rateLimitStore.get(address);
 
   if (!entry || entry.resetAt <= now) {
-    rateLimitStore.set(address, {
-      count: 1,
-      resetAt: now + WINDOW_MS,
-    });
+    rateLimitStore.set(address, { count: 1, resetAt: now + WINDOW_MS });
     return false;
   }
 
@@ -35,21 +38,31 @@ function isRateLimited(address: string) {
   return entry.count > MAX_REQUESTS_PER_WINDOW;
 }
 
+function newTransmissionId() {
+  return crypto.randomUUID().slice(0, 8).toUpperCase();
+}
+
+function readProviderConfig(): ProviderConfig {
+  return {
+    contactToEmail: process.env.CONTACT_TO_EMAIL,
+    contactFromEmail: process.env.CONTACT_FROM_EMAIL,
+    resendApiKey: process.env.RESEND_API_KEY,
+    cfAccountId: process.env.CF_ACCOUNT_ID,
+    cfEmailToken: process.env.CF_EMAIL_TOKEN,
+  };
+}
+
 export async function POST(request: Request) {
   const address = getClientAddress(request);
 
   if (isRateLimited(address)) {
     return NextResponse.json(
-      {
-        ok: false,
-        message: "Transmission window saturated. Retry in one minute.",
-      },
+      { ok: false, message: "Transmission window saturated. Retry in one minute." },
       { status: 429 },
     );
   }
 
   let payload: unknown;
-
   try {
     payload = await request.json();
   } catch {
@@ -66,107 +79,48 @@ export async function POST(request: Request) {
     );
   }
 
-  const body = payload as Record<string, unknown>;
-  const callsign = typeof body.callsign === "string" ? body.callsign.trim() : "";
-  const email = typeof body.email === "string" ? body.email.trim() : "";
-  const message = typeof body.message === "string" ? body.message.trim() : "";
-  const website = typeof body.website === "string" ? body.website.trim() : "";
+  const submission = parseSubmission(payload as Record<string, unknown>);
 
-  // Honeypot submissions receive a neutral response without sending anything.
-  if (website) {
+  // Honeypot submissions receive a neutral success without sending anything.
+  if (submission.kind === "honeypot") {
     return NextResponse.json({
       ok: true,
-      transmissionId: crypto.randomUUID().slice(0, 8).toUpperCase(),
+      transmissionId: newTransmissionId(),
       mode: "accepted",
       message: "Transmission acknowledged.",
     });
   }
 
-  if (callsign.length < 2 || callsign.length > 80) {
+  if (submission.kind === "invalid") {
     return NextResponse.json(
-      { ok: false, message: "Callsign must contain 2 to 80 characters." },
-      { status: 400 },
+      { ok: false, message: submission.message },
+      { status: submission.status },
     );
   }
 
-  if (!EMAIL_PATTERN.test(email) || email.length > 160) {
+  const transmissionId = newTransmissionId();
+  const config = readProviderConfig();
+  const envelope = buildEnvelope(submission.fields, transmissionId, config);
+  const outcome = await deliver(config, envelope);
+
+  if (outcome?.kind === "failed") {
+    // Minimal, PII-free server log for observability.
+    console.warn(`contact: delivery failed (status ${outcome.status})`);
     return NextResponse.json(
-      { ok: false, message: "Return channel is not a valid email address." },
-      { status: 400 },
+      { ok: false, message: outcome.message },
+      { status: outcome.status },
     );
   }
 
-  if (message.length < 10 || message.length > 2_000) {
-    return NextResponse.json(
-      { ok: false, message: "Coordinates must contain 10 to 2,000 characters." },
-      { status: 400 },
-    );
-  }
-
-  const transmissionId = crypto.randomUUID().slice(0, 8).toUpperCase();
-  const resendApiKey = process.env.RESEND_API_KEY;
-  const contactToEmail = process.env.CONTACT_TO_EMAIL;
-  const contactFromEmail =
-    process.env.CONTACT_FROM_EMAIL?.trim() ||
-    "Eren Isik Lab <onboarding@resend.dev>";
-
-  if (resendApiKey && contactToEmail) {
-    let response: Response;
-
-    try {
-      response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        signal: AbortSignal.timeout(10_000),
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: contactFromEmail,
-          to: [contactToEmail],
-          reply_to: email,
-          subject: `[Mission Control ${transmissionId}] ${callsign}`,
-          text: [
-            `Callsign: ${callsign}`,
-            `Return channel: ${email}`,
-            `Transmission ID: ${transmissionId}`,
-            "",
-            message,
-          ].join("\n"),
-        }),
-      });
-    } catch {
-      return NextResponse.json(
-        {
-          ok: false,
-          message: "Relay connection timed out. Retry the transmission.",
-        },
-        { status: 502 },
-      );
-    }
-
-    if (!response.ok) {
-      return NextResponse.json(
-        {
-          ok: false,
-          message: "Uplink reached the relay, but delivery was not confirmed.",
-        },
-        { status: 502 },
-      );
-    }
-
-    return NextResponse.json({
-      ok: true,
-      transmissionId,
-      mode: "live",
-      message: "Transmission delivered. Return channel established.",
-    });
-  }
+  const mode = outcome?.kind === "sent" ? "live" : "simulation";
 
   return NextResponse.json({
     ok: true,
     transmissionId,
-    mode: "simulation",
-    message: "Transmission accepted in simulation mode.",
+    mode,
+    message:
+      mode === "live"
+        ? "Transmission delivered. Return channel established."
+        : "Transmission accepted in simulation mode.",
   });
 }
