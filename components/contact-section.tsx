@@ -3,10 +3,11 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 
+import { buildContactMailto } from "@/lib/contact";
 import { siteConfig } from "@/lib/site";
 
 type FormState = {
-  status: "idle" | "sending" | "success" | "error";
+  status: "idle" | "opening";
   message: string;
 };
 
@@ -16,53 +17,22 @@ export function ContactSection() {
     message: "I usually reply within two days.",
   });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(event.currentTarget);
 
-    setState({
-      status: "sending",
-      message: "Sending your message...",
+    const href = buildContactMailto(siteConfig.email, {
+      name: String(formData.get("callsign") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      message: String(formData.get("message") ?? ""),
     });
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          callsign: formData.get("callsign"),
-          email: formData.get("email"),
-          message: formData.get("message"),
-          website: formData.get("website"),
-        }),
-      });
-      const result = (await response.json()) as {
-        ok: boolean;
-        message: string;
-      };
+    setState({
+      status: "opening",
+      message: `Opening your mail app… if nothing happens, email ${siteConfig.email} directly.`,
+    });
 
-      if (!response.ok || !result.ok) {
-        setState({
-          status: "error",
-          message: result.message ?? "The message could not be sent.",
-        });
-        return;
-      }
-
-      setState({
-        status: "success",
-        message: "Thanks. Your message is on its way.",
-      });
-      form.reset();
-    } catch {
-      setState({
-        status: "error",
-        message: "The contact service is unavailable. Please try again shortly.",
-      });
-    }
+    window.location.href = href;
   }
 
   return (
@@ -146,17 +116,6 @@ export function ContactSection() {
             />
           </div>
 
-          <div className="absolute -left-[10000px]" aria-hidden="true">
-            <label htmlFor="website">Website</label>
-            <input
-              id="website"
-              name="website"
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
-
           <div className="form-footer">
             <p
               className="form-status"
@@ -165,12 +124,8 @@ export function ContactSection() {
             >
               {state.message}
             </p>
-            <button
-              type="submit"
-              className="contact-submit"
-              disabled={state.status === "sending"}
-            >
-              {state.status === "sending" ? "Sending..." : "Send message"}
+            <button type="submit" className="contact-submit">
+              Compose email
               <span aria-hidden="true">→</span>
             </button>
           </div>

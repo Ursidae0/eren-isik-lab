@@ -67,36 +67,13 @@ Set the tunnel token:
 TUNNEL_TOKEN=your-cloudflare-tunnel-token
 ```
 
-Mission Control runs in simulation mode when the Resend values are empty. For
-live delivery, verify `erenisiklab.com` in Resend and set:
+`TUNNEL_TOKEN` is the only secret the stack needs. It is read by Docker Compose
+at runtime, excluded from the build context, and not embedded in the frontend
+image.
 
-```dotenv
-RESEND_API_KEY=re_your_key
-CONTACT_TO_EMAIL=your-inbox@example.com
-CONTACT_FROM_EMAIL="Eren Isik Lab <contact@erenisiklab.com>"
-```
-
-Secrets are read by Docker Compose at runtime. They are excluded from the build
-context and are not embedded in the frontend image.
-
-### Alternative: Cloudflare Email Service (beta)
-
-Instead of Resend you can deliver through Cloudflare Email Service. It is free
-when `CONTACT_TO_EMAIL` is a verified destination already configured in
-Cloudflare Email Routing. Leave `RESEND_API_KEY` empty (Resend takes precedence
-when both are set) and instead set:
-
-```dotenv
-CF_ACCOUNT_ID=your-cloudflare-account-id
-CF_EMAIL_TOKEN=your-email-sending-api-token
-CONTACT_TO_EMAIL=your-verified-inbox@example.com
-CONTACT_FROM_EMAIL="Eren Isik Lab <contact@erenisiklab.com>"
-```
-
-This requires the domain onboarded for email sending (MX/SPF/DKIM/DMARC) in
-Cloudflare. Because the form only notifies your own verified inbox, it stays on
-the free verified-destination path. With neither provider configured, the API
-remains in simulation mode.
+The contact form sends no server-side email and needs no provider or API key: it
+opens the visitor's own mail client via a `mailto:` to `contact@erenisiklab.com`,
+which Cloudflare Email Routing forwards to the owner's inbox.
 
 ## 5. Validate the Compose Configuration
 
