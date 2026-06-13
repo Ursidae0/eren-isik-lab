@@ -41,6 +41,12 @@ services:
     dns:
       - 1.1.1.1
       - 1.0.0.1
+    # Docker's embedded resolver can't forward external DNS inside this LXC, but
+    # the container reaches the internet directly. Pin Open-Meteo's IP so the
+    # weather fetch bypasses DNS. If it ever changes the route just falls back to
+    # the default ambient (graceful) — re-resolve api.open-meteo.com and update.
+    extra_hosts:
+      - "api.open-meteo.com:188.40.99.226"
     networks:
       - edge
 
