@@ -24,7 +24,7 @@ async function waitForApplication() {
 }
 
 const html = await waitForApplication();
-assert.match(html, /Atmosphere/);
+assert.match(html, /atmosphere-status/);
 assert.match(html, /Selected work/);
 
 const fallbackResponse = await fetch(`${baseUrl}/api/ambient`);
@@ -46,6 +46,7 @@ const first = await firstResponse.json();
 assert.equal(firstResponse.headers.get("x-ambient-cache"), "miss");
 assert.equal(first.available, true);
 assert.equal(first.weather, "rain");
+assert.equal(first.season, "summer");
 assert.equal(first.locationLabel, "Istanbul, TR");
 assert.equal(first.windDirectionDeg, 275);
 assert.equal("latitude" in first, false);

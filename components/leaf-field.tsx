@@ -8,6 +8,7 @@ import {
   getParticleProfile,
   getWindVector,
   type AmbientPhase,
+  type AmbientSeason,
   type AmbientWeatherMode,
 } from "@/lib/ambient";
 
@@ -54,6 +55,10 @@ const palettes: Record<AmbientPhase | "default", string[]> = {
   night: ["#596e65", "#667b70", "#6f7865", "#7f876d"],
   default: ["#718263", "#82906d", "#9f986f", "#b0a477"],
 };
+const seasonalPalettes: Partial<Record<AmbientSeason, string[]>> = {
+  spring: ["#769468", "#8ca878", "#a4b981", "#66865f"],
+  autumn: ["#9b6845", "#b57b48", "#826244", "#c08d55"],
+};
 
 function createLeaf(
   width: number,
@@ -86,29 +91,31 @@ function createLeaf(
 function createRainDrop(
   width: number,
   height: number,
+  intensity: number,
   randomY = true,
 ): RainDrop {
   return {
     x: Math.random() * width,
     y: randomY ? Math.random() * height : -20 - Math.random() * 100,
-    length: 9 + Math.random() * 13,
-    speed: 330 + Math.random() * 210,
-    opacity: 0.08 + Math.random() * 0.12,
+    length: 8 + intensity * 13 + Math.random() * (9 + intensity * 10),
+    speed: 290 + intensity * 180 + Math.random() * (170 + intensity * 130),
+    opacity: 0.14 + intensity * 0.25 + Math.random() * 0.16,
   };
 }
 
 function createSnowflake(
   width: number,
   height: number,
+  intensity: number,
   randomY = true,
 ): Snowflake {
   return {
     x: Math.random() * width,
     y: randomY ? Math.random() * height : -8 - Math.random() * 80,
-    radius: 1.2 + Math.random() * 2.2,
-    speed: 20 + Math.random() * 34,
+    radius: 1.1 + intensity * 1.2 + Math.random() * (1.7 + intensity),
+    speed: 16 + intensity * 12 + Math.random() * (24 + intensity * 14),
     phase: Math.random() * Math.PI * 2,
-    opacity: 0.22 + Math.random() * 0.28,
+    opacity: 0.32 + intensity * 0.3 + Math.random() * 0.22,
   };
 }
 
@@ -161,6 +168,7 @@ function drawLeaf(
 
 function getParticlePalette(
   phase: AmbientPhase,
+  season: AmbientSeason,
   weather: AmbientWeatherMode,
   localWeather: boolean,
 ) {
@@ -172,12 +180,17 @@ function getParticlePalette(
     return palettes.night;
   }
 
+  const seasonalPalette = seasonalPalettes[season];
+  if (seasonalPalette) {
+    return seasonalPalette;
+  }
+
   return palettes[phase];
 }
 
 export function LeafField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { conditions, preference } = useAmbient();
+  const { conditions } = useAmbient();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -186,12 +199,12 @@ export function LeafField() {
       desynchronized: true,
     });
 
-    if (!canvas || !context || preference === "off") {
+    if (!canvas || !context) {
       context?.clearRect(0, 0, canvas?.width ?? 0, canvas?.height ?? 0);
       return;
     }
 
-    const localWeather = preference === "local" && conditions.available;
+    const localWeather = conditions.available;
     const activeConditions = localWeather
       ? conditions
       : defaultAmbientConditions;
@@ -204,8 +217,13 @@ export function LeafField() {
       activeConditions.precipitationMm,
       activeConditions.windGustKmh,
     );
+    const precipitationIntensity = Math.min(
+      1,
+      activeConditions.precipitationMm / 4,
+    );
     const colors = getParticlePalette(
       activeConditions.phase,
+      activeConditions.season,
       activeConditions.weather,
       localWeather,
     );
@@ -234,18 +252,31 @@ export function LeafField() {
 
     const resetParticles = () => {
       const baseLeafDensity = narrowViewport.matches ? 9 : 17;
-      const precipitationFactor = narrowViewport.matches ? 0.65 : 1;
+      const precipitationFactor = narrowViewport.matches ? 0.78 : 1;
+      const seasonalLeafFactor =
+        localWeather && activeConditions.season === "winter" ? 0 : 1;
+      const leafDensity =
+        profile.leafFactor === 0 || seasonalLeafFactor === 0
+          ? 0
+          : Math.max(
+              4,
+              Math.round(
+                baseLeafDensity *
+                  profile.leafFactor *
+                  seasonalLeafFactor,
+              ),
+            );
       leaves = Array.from(
-        { length: Math.max(4, Math.round(baseLeafDensity * profile.leafFactor)) },
+        { length: leafDensity },
         () => createLeaf(width, height, colors),
       );
       rain = Array.from(
         { length: Math.round(profile.rainDensity * precipitationFactor) },
-        () => createRainDrop(width, height),
+        () => createRainDrop(width, height, precipitationIntensity),
       );
       snow = Array.from(
         { length: Math.round(profile.snowDensity * precipitationFactor) },
-        () => createSnowflake(width, height),
+        () => createSnowflake(width, height, precipitationIntensity),
       );
     };
 
@@ -341,13 +372,26 @@ export function LeafField() {
         }
       }
 
-      context.lineWidth = 0.8;
+      context.lineWidth = 1;
       context.lineCap = "round";
-      context.strokeStyle = "rgb(210 226 220)";
       for (const drop of rain) {
         drop.x += windX * 1.7 * delta;
         drop.y += drop.speed * delta;
+
+        context.strokeStyle = "rgb(26 45 44)";
+        context.globalAlpha = drop.opacity * 0.34;
+        context.lineWidth = 2.2;
+        context.beginPath();
+        context.moveTo(drop.x, drop.y);
+        context.lineTo(
+          drop.x - wind.x * drop.length * 0.7,
+          drop.y - drop.length,
+        );
+        context.stroke();
+
+        context.strokeStyle = "rgb(222 239 235)";
         context.globalAlpha = drop.opacity;
+        context.lineWidth = 0.9;
         context.beginPath();
         context.moveTo(drop.x, drop.y);
         context.lineTo(
@@ -361,16 +405,31 @@ export function LeafField() {
           drop.x < -80 ||
           drop.x > width + 80
         ) {
-          Object.assign(drop, createRainDrop(width, height, false));
+          Object.assign(
+            drop,
+            createRainDrop(width, height, precipitationIntensity, false),
+          );
         }
       }
 
-      context.fillStyle = "#f3f5ed";
       for (const flake of snow) {
         flake.phase += delta * (0.7 + profile.turbulence * 0.4);
         flake.x +=
           (windX * 0.45 + Math.sin(flake.phase) * 12) * delta;
         flake.y += (flake.speed + Math.max(0, windY * 0.4)) * delta;
+        context.fillStyle = "rgb(38 55 51)";
+        context.globalAlpha = flake.opacity * 0.22;
+        context.beginPath();
+        context.arc(
+          flake.x,
+          flake.y,
+          flake.radius + 1.4,
+          0,
+          Math.PI * 2,
+        );
+        context.fill();
+
+        context.fillStyle = "#fbfcf6";
         context.globalAlpha = flake.opacity;
         context.beginPath();
         context.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
@@ -381,7 +440,10 @@ export function LeafField() {
           flake.x < -50 ||
           flake.x > width + 50
         ) {
-          Object.assign(flake, createSnowflake(width, height, false));
+          Object.assign(
+            flake,
+            createSnowflake(width, height, precipitationIntensity, false),
+          );
         }
       }
       context.globalAlpha = 1;
@@ -452,7 +514,7 @@ export function LeafField() {
       document.removeEventListener("visibilitychange", handleEnvironmentChange);
       reducedMotion.removeEventListener("change", handleEnvironmentChange);
     };
-  }, [conditions, preference]);
+  }, [conditions]);
 
   return <canvas ref={canvasRef} aria-hidden="true" className="leaf-canvas" />;
 }

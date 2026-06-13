@@ -7,10 +7,16 @@ export const ambientWeatherModes = [
 ] as const;
 
 export const ambientPhases = ["dawn", "day", "dusk", "night"] as const;
+export const ambientSeasons = [
+  "spring",
+  "summer",
+  "autumn",
+  "winter",
+] as const;
 
 export type AmbientWeatherMode = (typeof ambientWeatherModes)[number];
 export type AmbientPhase = (typeof ambientPhases)[number];
-export type AmbientPreference = "local" | "default" | "off";
+export type AmbientSeason = (typeof ambientSeasons)[number];
 
 export type AmbientParticleProfile = {
   leafFactor: number;
@@ -24,6 +30,7 @@ export type AmbientConditions = {
   source: "local" | "fallback";
   weather: AmbientWeatherMode;
   phase: AmbientPhase;
+  season: AmbientSeason;
   isDay: boolean;
   temperatureC: number | null;
   windSpeedKmh: number;
@@ -68,6 +75,7 @@ export const defaultAmbientConditions: AmbientConditions = {
   source: "fallback",
   weather: "clear",
   phase: "day",
+  season: "summer",
   isDay: true,
   temperatureC: null,
   windSpeedKmh: 8,
@@ -78,6 +86,37 @@ export const defaultAmbientConditions: AmbientConditions = {
   observedAt: null,
   locationLabel: null,
 };
+
+const weatherLabels: Record<AmbientWeatherMode, string> = {
+  clear: "Clear",
+  cloudy: "Cloudy",
+  fog: "Fog",
+  rain: "Rain",
+  snow: "Snow",
+};
+
+const phaseLabels: Record<AmbientPhase, string> = {
+  dawn: "Dawn",
+  day: "Day",
+  dusk: "Dusk",
+  night: "Night",
+};
+
+export function getAmbientStatusLabel(conditions: AmbientConditions) {
+  if (!conditions.available) {
+    return "";
+  }
+
+  return [
+    weatherLabels[conditions.weather],
+    phaseLabels[conditions.phase],
+    conditions.temperatureC === null
+      ? null
+      : `${Math.round(conditions.temperatureC)}°C`,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -104,8 +143,10 @@ export function getParticleProfile(
 
   if (weather === "rain") {
     return {
-      leafFactor: 0.58,
-      rainDensity: Math.round(14 + precipitation * 8),
+      leafFactor: 0,
+      rainDensity: Math.round(
+        18 + Math.pow(precipitation / 4, 0.7) * 80,
+      ),
       snowDensity: 0,
       turbulence,
     };
@@ -113,9 +154,11 @@ export function getParticleProfile(
 
   if (weather === "snow") {
     return {
-      leafFactor: 0.38,
+      leafFactor: 0,
       rainDensity: 0,
-      snowDensity: Math.round(13 + precipitation * 6),
+      snowDensity: Math.round(
+        16 + Math.pow(precipitation / 4, 0.7) * 60,
+      ),
       turbulence: turbulence * 0.7,
     };
   }
@@ -125,34 +168,6 @@ export function getParticleProfile(
     rainDensity: 0,
     snowDensity: 0,
     turbulence,
-  };
-}
-
-export function resolveAmbientPresentation(
-  preference: AmbientPreference,
-  conditions: AmbientConditions,
-  browserPhase: AmbientPhase,
-) {
-  if (preference === "off") {
-    return {
-      phase: "default" as const,
-      weather: "clear" as const,
-      particlesEnabled: false,
-    };
-  }
-
-  if (preference === "default") {
-    return {
-      phase: "default" as const,
-      weather: "clear" as const,
-      particlesEnabled: true,
-    };
-  }
-
-  return {
-    phase: conditions.available ? conditions.phase : browserPhase,
-    weather: conditions.available ? conditions.weather : ("clear" as const),
-    particlesEnabled: true,
   };
 }
 
@@ -167,6 +182,7 @@ export function isAmbientConditions(value: unknown): value is AmbientConditions 
     (candidate.source === "local" || candidate.source === "fallback") &&
     ambientWeatherModes.includes(candidate.weather as AmbientWeatherMode) &&
     ambientPhases.includes(candidate.phase as AmbientPhase) &&
+    ambientSeasons.includes(candidate.season as AmbientSeason) &&
     typeof candidate.isDay === "boolean" &&
     typeof candidate.windSpeedKmh === "number" &&
     typeof candidate.windDirectionDeg === "number" &&
@@ -319,6 +335,35 @@ export function getBrowserTimePhase(date = new Date()): AmbientPhase {
   return "night";
 }
 
+export function getAmbientSeason(
+  currentTime: string | undefined,
+  latitude: number,
+): AmbientSeason {
+  const parsedMonth = currentTime?.match(/^(\d{4})-(\d{2})/)?.[2];
+  const month = parsedMonth ? Number(parsedMonth) : new Date().getMonth() + 1;
+  const northernSeason =
+    month >= 3 && month <= 5
+      ? "spring"
+      : month >= 6 && month <= 8
+        ? "summer"
+        : month >= 9 && month <= 11
+          ? "autumn"
+          : "winter";
+
+  if (latitude >= 0) {
+    return northernSeason;
+  }
+
+  const southernSeasons: Record<AmbientSeason, AmbientSeason> = {
+    spring: "autumn",
+    summer: "winter",
+    autumn: "spring",
+    winter: "summer",
+  };
+
+  return southernSeasons[northernSeason];
+}
+
 export function normalizeOpenMeteoResponse(
   response: OpenMeteoResponse,
   location: CoarseLocation,
@@ -344,6 +389,7 @@ export function normalizeOpenMeteoResponse(
       response.daily?.sunset?.[0],
       isDay,
     ),
+    season: getAmbientSeason(current.time, location.latitude),
     isDay,
     temperatureC: optionalFiniteNumber(current.temperature_2m),
     windSpeedKmh: Math.max(0, finiteNumber(current.wind_speed_10m, 8)),

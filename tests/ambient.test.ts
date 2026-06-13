@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  defaultAmbientConditions,
   getAmbientPhase,
+  getAmbientSeason,
+  getAmbientStatusLabel,
   getBrowserTimePhase,
   getLocationCacheKey,
   getParticleProfile,
@@ -11,8 +14,22 @@ import {
   normalizeOpenMeteoResponse,
   normalizeWeatherCode,
   readCoarseLocation,
-  resolveAmbientPresentation,
 } from "../lib/ambient.ts";
+
+test("formats live header weather while leaving fallback blank", () => {
+  assert.equal(
+    getAmbientStatusLabel({
+      ...defaultAmbientConditions,
+      available: true,
+      source: "local",
+      weather: "rain",
+      phase: "dusk",
+      temperatureC: 18.4,
+    }),
+    "Rain · Dusk · 18°C",
+  );
+  assert.equal(getAmbientStatusLabel(defaultAmbientConditions), "");
+});
 
 test("reads and rounds Cloudflare coordinates without retaining an IP", () => {
   const headers = new Headers({
@@ -100,6 +117,14 @@ test("provides a deterministic browser-time fallback", () => {
   assert.equal(getBrowserTimePhase(new Date(2026, 5, 11, 23, 0)), "night");
 });
 
+test("derives seasons from local date and hemisphere", () => {
+  assert.equal(getAmbientSeason("2026-04-12T10:00", 41), "spring");
+  assert.equal(getAmbientSeason("2026-07-12T10:00", 41), "summer");
+  assert.equal(getAmbientSeason("2026-10-12T10:00", 41), "autumn");
+  assert.equal(getAmbientSeason("2026-01-12T10:00", 41), "winter");
+  assert.equal(getAmbientSeason("2026-07-12T10:00", -33.9), "winter");
+});
+
 test("normalizes a weather response without exposing coordinates", () => {
   const conditions = normalizeOpenMeteoResponse(
     {
@@ -133,6 +158,7 @@ test("normalizes a weather response without exposing coordinates", () => {
     source: "local",
     weather: "rain",
     phase: "day",
+    season: "summer",
     isDay: true,
     temperatureC: 24.4,
     windSpeedKmh: 18,
@@ -147,40 +173,6 @@ test("normalizes a weather response without exposing coordinates", () => {
   assert.equal("longitude" in conditions, false);
   assert.equal(isAmbientConditions(conditions), true);
   assert.equal(isAmbientConditions({ weather: "clear" }), false);
-});
-
-test("resolves local, default, and off presentation modes", () => {
-  const fallback = {
-    available: false,
-    source: "fallback" as const,
-    weather: "clear" as const,
-    phase: "day" as const,
-    isDay: true,
-    temperatureC: null,
-    windSpeedKmh: 8,
-    windDirectionDeg: 260,
-    windGustKmh: 12,
-    precipitationMm: 0,
-    cloudCoverPercent: 20,
-    observedAt: null,
-    locationLabel: null,
-  };
-
-  assert.deepEqual(resolveAmbientPresentation("local", fallback, "dusk"), {
-    phase: "dusk",
-    weather: "clear",
-    particlesEnabled: true,
-  });
-  assert.deepEqual(resolveAmbientPresentation("default", fallback, "night"), {
-    phase: "default",
-    weather: "clear",
-    particlesEnabled: true,
-  });
-  assert.deepEqual(resolveAmbientPresentation("off", fallback, "night"), {
-    phase: "default",
-    weather: "clear",
-    particlesEnabled: false,
-  });
 });
 
 test("converts meteorological wind direction into screen movement", () => {
@@ -203,14 +195,20 @@ test("keeps precipitation effects restrained and weather-specific", () => {
 
   const rain = getParticleProfile("rain", 8, 90);
   assert.deepEqual(rain, {
-    leafFactor: 0.58,
-    rainDensity: 46,
+    leafFactor: 0,
+    rainDensity: 98,
     snowDensity: 0,
     turbulence: 1.35,
   });
 
   const snow = getParticleProfile("snow", 1, 18);
+  assert.equal(snow.leafFactor, 0);
   assert.equal(snow.rainDensity, 0);
-  assert.equal(snow.snowDensity, 19);
+  assert.equal(snow.snowDensity, 39);
   assert.ok(snow.turbulence < rain.turbulence);
+
+  const lightRain = getParticleProfile("rain", 0.25, 18);
+  const steadyRain = getParticleProfile("rain", 1.2, 18);
+  assert.ok(steadyRain.rainDensity - lightRain.rainDensity >= 20);
+  assert.ok(rain.rainDensity - steadyRain.rainDensity >= 40);
 });
