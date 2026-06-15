@@ -8,11 +8,7 @@ import {
 } from "react";
 
 import { useLanguage } from "@/components/preferences-provider";
-import type { Project } from "@/lib/projects";
-
-type ProjectGalleryProps = {
-  projects: Project[];
-};
+import { getProjects } from "@/lib/projects";
 
 const treePaths = [
   "M64 1185C49 1070 72 970 57 853C44 750 70 644 59 531C49 426 71 320 62 210C57 143 62 86 60 14",
@@ -65,9 +61,10 @@ function resetCardTilt(event: ReactPointerEvent<HTMLAnchorElement>) {
   card.style.setProperty("--card-glow-y", "50%");
 }
 
-export function ProjectGallery({ projects }: ProjectGalleryProps) {
-  const { content } = useLanguage();
+export function ProjectGallery() {
+  const { content, locale } = useLanguage();
   const section = content.projectsSection;
+  const projects = getProjects(locale);
   const treeRef = useRef<HTMLDivElement>(null);
   const growthRef = useRef<HTMLDivElement>(null);
 

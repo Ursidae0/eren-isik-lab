@@ -1,440 +1,454 @@
 {
-  "source": {
-    "documents": [
-      "eren_isik_cv_EN_2026.pdf",
-      "eren_isik_cv_TR_2026.pdf"
+  "en": {
+    "education": [
+      {
+        "institution": "Izmir Institute of Technology",
+        "degree": "B.Sc. Computer Engineering",
+        "period": "2023 - 2027"
+      }
     ],
-    "canonicalLanguage": "English",
-    "profileUrl": "https://github.com/Ursidae0"
-  },
-  "education": [
-    {
-      "institution": "Izmir Institute of Technology",
-      "location": "Izmir, Turkiye",
-      "degree": "B.Sc. Computer Engineering",
-      "period": "2023 - 2027",
-      "gpa": "3.25 / 4.00"
-    }
-  ],
-  "experience": [
-    {
-      "organization": "Cengaver Rover",
-      "role": "Software Team Member",
-      "program": "TEKNOFEST University Rover Competition",
-      "location": "Izmir, Turkiye",
-      "period": "September 2025 - Present",
-      "categories": [
-        "Robotics",
-        "Embedded Systems"
-      ],
-      "highlights": [
-        "Rewrote the rover drive firmware from MicroPython to C with the Raspberry Pi Pico SDK, replacing a polling loop with a 1 kHz real-time control loop.",
-        "Added CRC-8 packet integrity, a hardware watchdog, and a Dead Man's Switch, none of which were present in the original firmware.",
-        "Designed a framed binary protocol over USB CDC and implemented the matching host-side driver as a ROS 2 node running on NVIDIA Jetson.",
-        "Built layered fail-safe behavior with communication-timeout disarming, hardware-watchdog reset, and GPIO-level motor cutoff."
-      ],
-      "technologies": [
-        "C",
-        "MicroPython",
-        "Raspberry Pi Pico SDK",
-        "ARM Cortex-M0+",
-        "ROS 2",
-        "NVIDIA Jetson",
-        "USB CDC",
-        "CRC-8",
-        "Hardware Watchdog",
-        "GPIO"
-      ]
-    }
-  ],
-  "technicalSkills": {
-    "programming": [
-      "Python",
-      "C/C++",
-      "CUDA"
+    "experience": [
+      {
+        "organization": "Cengaver Rover",
+        "role": "Software Team Member",
+        "program": "TEKNOFEST University Rover Competition",
+        "period": "September 2025 - Present"
+      }
     ],
-    "libraries": [
-      "scikit-learn",
-      "OpenCV",
-      "NumPy",
-      "Matplotlib",
-      "scikit-fuzzy"
-    ],
-    "developerTools": [
-      "Git",
-      "Docker",
-      "CMake",
-      "Bash",
-      "nvprof",
-      "Raspberry Pi Pico SDK"
-    ],
-    "platformsAndSystems": [
-      "ROS 2",
-      "NVIDIA Jetson Nano",
-      "TensorRT",
-      "Raspberry Pi Pico",
-      "ARM Cortex-M0+",
-      "USB CDC"
-    ],
-    "languages": [
-      "Turkish - Native",
-      "English - B2"
+    "technicalSkills": {
+      "programming": ["Python", "C/C++", "CUDA"],
+      "libraries": ["scikit-learn", "OpenCV", "NumPy", "Matplotlib", "scikit-fuzzy"],
+      "developerTools": ["Git", "Docker", "CMake", "Bash", "nvprof", "Raspberry Pi Pico SDK"],
+      "platformsAndSystems": ["ROS 2", "NVIDIA Jetson Nano", "TensorRT", "Raspberry Pi Pico", "ARM Cortex-M0+", "USB CDC"],
+      "languages": ["Turkish - Native", "English - B2"]
+    },
+    "projects": [
+      {
+        "id": "eol-vibration-defect-detection",
+        "title": "EOL Vibration Defect Detection",
+        "period": "June 2026",
+        "categories": ["Signal Processing", "Machine Learning"],
+        "technologies": ["Python", "NumPy", "SciPy", "scikit-learn", "Docker", "pytest"],
+        "repository": "https://github.com/Ursidae0/eol-vibration-defect-detection",
+        "summary": "A bearing fault detector built on the public CWRU dataset. My main goal was an honest evaluation with no data leakage. I use envelope analysis to find fault signatures, a simple physics-based pass/fail check, and a RandomForest model, then test how well it holds up across different motor loads and fault sizes.",
+        "metrics": [
+          {
+            "value": "100%",
+            "label": "fault detection rate",
+            "context": "The physics-based detector caught every fault with no false alarms on healthy bearings."
+          },
+          {
+            "value": "0.22",
+            "label": "score on shuffled labels",
+            "context": "When I shuffled the labels, accuracy dropped to chance (about 0.28). So the real 0.99 score is genuine signal, not leakage."
+          },
+          {
+            "value": "0.81",
+            "label": "accuracy on unseen fault sizes",
+            "context": "Average when tested on a fault size the model never saw; it drops to 0.60 on the hardest case, which is the honest limit."
+          }
+        ],
+        "highlights": [
+          "Computed the bearing fault frequencies (BPFO, BPFI, BSF, FTF) from the SKF 6205 geometry, and isolated the fault impulses with a band-pass filter and a Hilbert envelope.",
+          "Found that healthy recordings were leaking into both the training and test sets, fixed the split, and added checks so the same file can never appear in both again.",
+          "Reported balanced accuracy and macro-F1 across leave-one-load-out and leave-one-severity-out tests, plus a shuffled-label sanity check.",
+          "Tried an amplitude-independent feature set to improve results across fault sizes, and reported the negative result instead of hiding it.",
+          "Made every number reproducible from one fixed-seed script that writes metrics.json, all inside Docker."
+        ],
+        "technicalSpecs": [
+          { "label": "Dataset", "value": "CWRU Bearing Data Center, 40 recordings at 12 kHz" },
+          { "label": "Bearing", "value": "SKF 6205, drive end" },
+          { "label": "Features", "value": "Time-domain statistics and Hilbert envelope band energies" },
+          { "label": "Model", "value": "RandomForest with file-level GroupKFold" },
+          { "label": "Evaluation", "value": "Leakage-safe splits, balanced metrics, permutation test" },
+          { "label": "Environment", "value": "Docker, deterministic metrics.json" }
+        ]
+      },
+      {
+        "id": "mortar-ballistic-simulation",
+        "title": "Mortar Ballistic Simulation",
+        "period": "April 2026",
+        "categories": ["Simulation", "Systems"],
+        "technologies": ["C", "Python", "FastAPI", "ctypes", "CMake", "Docker", "JavaScript"],
+        "repository": "https://github.com/Ursidae0/MortarSimulation",
+        "summary": "An educational flight simulator for a generic 60 mm projectile, built to practice numerical methods and physics modeling. A C engine solves the trajectory with a 4th-order Runge-Kutta method, including air drag, wind, and a humidity-corrected standard atmosphere. It runs behind a FastAPI service with a simple canvas drawing. It uses only textbook physics and public values, with no real targeting or military use.",
+        "metrics": [
+          {
+            "value": "RK4",
+            "label": "trajectory solver",
+            "context": "4th-order Runge-Kutta over the full [x, y, z, vx, vy, vz] state, with steps down to 1 ms and the ground hit found by interpolating to y = 0."
+          },
+          {
+            "value": "10",
+            "label": "physics inputs",
+            "context": "Muzzle speed, elevation, azimuth, mass, calibre, drag coefficient, launch altitude, wind speed and direction, and humidity."
+          },
+          {
+            "value": "C + Python",
+            "label": "engine and API",
+            "context": "The C physics core is compiled to a shared library and called from a FastAPI service through ctypes, with a plain-JavaScript canvas frontend."
+          }
+        ],
+        "highlights": [
+          "Wrote the physics core in C: an RK4 integrator over the full state vector, with the ground impact found by interpolating to y = 0.",
+          "Modeled air density with the International Standard Atmosphere, corrected it for humidity, and applied quadratic drag relative to a configurable wind.",
+          "Compiled the engine to a shared library and connected it to a FastAPI endpoint through ctypes, with validated inputs.",
+          "Built a plain HTML/CSS/JavaScript canvas page that draws the trajectory and reports range, apex, time of flight, impact speed and angle, and sideways drift.",
+          "Containerized the project so the C unit tests and Python API tests run during the image build, with GitHub Actions on every push."
+        ],
+        "technicalSpecs": [
+          { "label": "Scope", "value": "Educational; generic 60 mm class; no operational use" },
+          { "label": "Physics core", "value": "C: RK4 integrator, standard atmosphere, quadratic drag" },
+          { "label": "State", "value": "[x, y, z, vx, vy, vz], steps down to 1 ms" },
+          { "label": "API", "value": "FastAPI with a ctypes bridge to the C library" },
+          { "label": "Frontend", "value": "Plain HTML/CSS/JavaScript canvas" },
+          { "label": "Outputs", "value": "Range, apex, time of flight, impact speed/angle, drift" },
+          { "label": "Build and CI", "value": "Multi-stage Docker; C and Python tests gate the build; GitHub Actions" }
+        ]
+      },
+      {
+        "id": "sparse-gpu-kernels",
+        "title": "Sparse GPU Kernels",
+        "period": "December 2025 - January 2026",
+        "categories": ["CUDA"],
+        "technologies": ["CUDA", "C++", "Docker", "NVIDIA NGC", "cuSPARSE", "cuBLAS"],
+        "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+        "summary": "I reproduced and benchmarked the Sputnik sparse-matrix CUDA kernels from a 2020 research paper (Gale et al.) on a modern RTX 4070 Super, to check whether the paper's results still hold on a newer GPU generation.",
+        "metrics": [
+          {
+            "value": "7.8x",
+            "label": "faster than dense cuBLAS",
+            "context": "Measured at 99% sparsity, where almost all matrix values are zero."
+          },
+          {
+            "value": "4.3 TFLOPs",
+            "label": "peak SpMM throughput",
+            "context": "Measured on an NVIDIA RTX 4070 Super."
+          },
+          {
+            "value": "70.5%",
+            "label": "break-even sparsity",
+            "context": "The point where the sparse kernel starts beating the dense one; close to the paper's roughly 71% result on an older V100 GPU."
+          }
+        ],
+        "highlights": [
+          "Ran the Sputnik CUDA library inside an NVIDIA NGC container.",
+          "Updated the container setup to work with current Linux kernel and NVIDIA driver versions.",
+          "Benchmarked the SpMM and SDDMM kernels against cuSPARSE and dense cuBLAS.",
+          "Confirmed that the sparse-kernel speedup and the break-even point still hold on a newer GPU generation."
+        ],
+        "technicalSpecs": [
+          { "label": "Workloads", "value": "SpMM and SDDMM" },
+          { "label": "GPU", "value": "NVIDIA GeForce RTX 4070 Super" },
+          { "label": "Baseline", "value": "cuSPARSE and dense cuBLAS" },
+          { "label": "Source paper", "value": "Gale et al., SC '20" },
+          { "label": "Environment", "value": "NVIDIA NGC container on an updated Linux and driver stack" }
+        ]
+      },
+      {
+        "id": "jetson-nano-inference",
+        "title": "Neural Network Inference on NVIDIA Jetson Nano",
+        "period": "December 2025",
+        "categories": ["Robotics", "CUDA", "Computer Vision"],
+        "technologies": ["Python", "CUDA", "TensorRT", "Docker", "nvprof", "NVIDIA Jetson Nano"],
+        "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+        "summary": "I ran three object-detection neural networks on a Jetson Nano with TensorRT and measured their speed and GPU usage, to find the fastest model and the main bottleneck.",
+        "metrics": [
+          {
+            "value": "~650 ms",
+            "label": "fastest model per image",
+            "context": "PeopleNet was the quickest of the three on the Jetson Nano's GPU."
+          },
+          {
+            "value": "99.9%",
+            "label": "peak GPU usage",
+            "context": "Reached by the fused convolution kernels."
+          },
+          {
+            "value": "~12.6%",
+            "label": "GPU usage during NMS",
+            "context": "The non-maximum suppression step was the main bottleneck, not the convolutions."
+          }
+        ],
+        "highlights": [
+          "Deployed PeopleNet, SSD-Inception-v2, and SSD-MobileNet-v2 with TensorRT.",
+          "Compared their end-to-end speed on the Jetson Nano's Tegra X1 GPU.",
+          "Profiled the GPU (streaming-multiprocessor) usage of each model with nvprof.",
+          "Found that the real bottleneck was non-maximum suppression, not the convolution layers."
+        ],
+        "technicalSpecs": [
+          { "label": "Platform", "value": "NVIDIA Jetson Nano" },
+          { "label": "Chip", "value": "NVIDIA Tegra X1" },
+          { "label": "Models", "value": "PeopleNet, SSD-Inception-v2, SSD-MobileNet-v2" },
+          { "label": "Runtime", "value": "TensorRT" },
+          { "label": "Profiler", "value": "nvprof" }
+        ]
+      },
+      {
+        "id": "computer-vision-portfolio",
+        "title": "Computer Vision Project Portfolio",
+        "period": "December 2025 - January 2026",
+        "categories": ["Computer Vision"],
+        "technologies": ["Python", "OpenCV", "scikit-learn", "scikit-fuzzy", "MLP", "Fuzzy C-Means"],
+        "repository": "https://github.com/Ursidae0/ImageUnderstanding",
+        "summary": "Two computer vision projects: counting people in images using shape (morphology) features, and pulling blood vessels out of retina images. The second one is a Python reimplementation of a published method, tested on the DRIVE dataset.",
+        "metrics": [
+          {
+            "value": "10.64%",
+            "label": "best people-counting error",
+            "context": "Mean error (MAPE) from the strongest shape-feature method."
+          },
+          {
+            "value": "86.27%",
+            "label": "counts within 15%",
+            "context": "Share of crowd-count estimates that landed within 15% of the true number."
+          },
+          {
+            "value": "0.86",
+            "label": "vessel extraction AUC",
+            "context": "Measured on the DRIVE retina test set, with 92.6% pixel accuracy."
+          }
+        ],
+        "highlights": [
+          "Extracted shape features from foreground masks using morphological closing and opening.",
+          "Trained an MLP model to estimate the number of people from those features.",
+          "Reimplemented a MATLAB retina-vessel method (Fuzzy C-Means plus supervised classification) in Python.",
+          "Traced the gap from the paper's reported 0.975 AUC to its custom Root Guided Decision Tree, which is not available in standard libraries, and reported it honestly."
+        ],
+        "technicalSpecs": [
+          { "label": "People-counting model", "value": "Multi-layer perceptron (MLP)" },
+          { "label": "Feature pipeline", "value": "Foreground masks with morphological closing and opening" },
+          { "label": "Retina dataset", "value": "DRIVE test set" },
+          { "label": "Retina pipeline", "value": "Hybrid Fuzzy C-Means plus supervised classification" },
+          { "label": "Reference", "value": "Paper reported 0.975 AUC using a custom Root Guided Decision Tree" }
+        ]
+      }
     ]
   },
-  "projects": [
-    {
-      "id": "eol-vibration-defect-detection",
-      "title": "EOL Vibration Defect Detection",
-      "image": "/projects/eol-vibration-defect-detection.svg",
-      "imageAlt": "Envelope spectrum with neon peaks at bearing fault frequencies",
-      "subtitle": "Leakage-safe ML evaluation for bearing fault diagnosis",
-      "period": "June 2026",
-      "categories": [
-        "Signal Processing",
-        "Machine Learning"
-      ],
-      "technologies": [
-        "Python",
-        "NumPy",
-        "SciPy",
-        "scikit-learn",
-        "Docker",
-        "pytest"
-      ],
-      "repository": "https://github.com/Ursidae0/eol-vibration-defect-detection",
-      "summary": "A reproducible CWRU bearing-fault case study built around leakage-safe evaluation: envelope-analysis features, a physics-informed pass/fail detector, and a RandomForest whose generalization across motor load and fault severity is measured with leakage-guarded holdouts and a label-permutation sanity check.",
-      "metrics": [
-        {
-          "value": "100%",
-          "label": "fault detection rate",
-          "context": "Physics-informed envelope detector with zero false alarms on healthy units (leave-one-out baseline)."
-        },
-        {
-          "value": "0.22",
-          "label": "permutation test to chance",
-          "context": "Shuffled-label accuracy collapses to chance (0.28 floor), so the 0.99 in-distribution score is real signal, not leakage."
-        },
-        {
-          "value": "0.81",
-          "label": "cross-severity accuracy",
-          "context": "Mean leave-one-severity-out; 0.60 on the unseen 0.014-inch fault, the honest generalization limit."
-        }
-      ],
-      "highlights": [
-        "Computed bearing fault frequencies (BPFO/BPFI/BSF/FTF) from SKF 6205 geometry and isolated fault impulses with bandpass plus Hilbert envelope analysis.",
-        "Audited the pipeline, found normal recordings leaking into both train and test, fixed the split, and added group-overlap assertions so it cannot recur.",
-        "Reported balanced accuracy and macro-F1 across rotated leave-one-load-out and leave-one-severity-out holdouts plus a label-permutation sanity check.",
-        "Tested an amplitude-invariant feature set as a cross-severity fix and reported the negative result instead of hiding it.",
-        "Made every number reproducible from one seeded evaluation script writing metrics.json, end to end inside Docker."
-      ],
-      "technicalSpecs": [
-        {
-          "label": "Dataset",
-          "value": "CWRU Bearing Data Center, 40 recordings at 12 kHz"
-        },
-        {
-          "label": "Bearing",
-          "value": "SKF 6205 drive end"
-        },
-        {
-          "label": "Features",
-          "value": "Time-domain statistics plus Hilbert envelope band energies"
-        },
-        {
-          "label": "Model",
-          "value": "RandomForest with file-level GroupKFold"
-        },
-        {
-          "label": "Evaluation",
-          "value": "Leakage-guarded holdouts, balanced metrics, permutation test"
-        },
-        {
-          "label": "Environment",
-          "value": "Docker; deterministic metrics.json"
-        }
-      ]
+  "tr": {
+    "education": [
+      {
+        "institution": "İzmir Yüksek Teknoloji Enstitüsü",
+        "degree": "Bilgisayar Mühendisliği (Lisans)",
+        "period": "2023 - 2027"
+      }
+    ],
+    "experience": [
+      {
+        "organization": "Cengaver Rover",
+        "role": "Yazılım Ekibi Üyesi",
+        "program": "TEKNOFEST Üniversite Rover Yarışması",
+        "period": "Eylül 2025 - Günümüz"
+      }
+    ],
+    "technicalSkills": {
+      "programming": ["Python", "C/C++", "CUDA"],
+      "libraries": ["scikit-learn", "OpenCV", "NumPy", "Matplotlib", "scikit-fuzzy"],
+      "developerTools": ["Git", "Docker", "CMake", "Bash", "nvprof", "Raspberry Pi Pico SDK"],
+      "platformsAndSystems": ["ROS 2", "NVIDIA Jetson Nano", "TensorRT", "Raspberry Pi Pico", "ARM Cortex-M0+", "USB CDC"],
+      "languages": ["Türkçe - Ana dil", "İngilizce - B2"]
     },
-    {
-      "id": "mortar-ballistic-simulation",
-      "title": "Mortar Ballistic Simulation",
-      "image": "/projects/mortar-ballistic-simulation.svg",
-      "imageAlt": "Parabolic mortar trajectory arc over a ranging grid",
-      "subtitle": "Educational exterior-ballistics demo: RK4 C engine, FastAPI, canvas",
-      "period": "April 2026",
-      "categories": [
-        "Simulation",
-        "Systems"
-      ],
-      "technologies": [
-        "C",
-        "Python",
-        "FastAPI",
-        "ctypes",
-        "CMake",
-        "Docker",
-        "JavaScript"
-      ],
-      "repository": "https://github.com/Ursidae0/MortarSimulation",
-      "summary": "An educational exterior-ballistics simulator for a generic 60 mm-class projectile, built to practice numerical methods and physical modeling. A C engine integrates the point-mass trajectory with 4th-order Runge-Kutta under quadratic drag, configurable wind, and a humidity-corrected International Standard Atmosphere, exposed through a FastAPI service (the C library loaded via ctypes) with a canvas trajectory frontend. C unit tests and API tests gate the containerized build. It uses textbook physics and public parameters only, with no operational, targeting, or fire-control use.",
-      "metrics": [
-        {
-          "value": "RK4",
-          "label": "trajectory integrator",
-          "context": "4th-order Runge-Kutta over the [x, y, z, vx, vy, vz] state vector, with steps down to 1 ms and ground impact interpolated to y=0."
-        },
-        {
-          "value": "10",
-          "label": "simulation inputs",
-          "context": "Muzzle velocity, elevation, azimuth, mass, calibre, drag coefficient, launch altitude, wind speed and direction, and humidity."
-        },
-        {
-          "value": "C + Python",
-          "label": "engine and API",
-          "context": "C physics core compiled to a shared library, loaded via ctypes into a FastAPI service with a vanilla-JS canvas frontend."
-        }
-      ],
-      "highlights": [
-        "Wrote the physics core in C: an RK4 integrator over the [x, y, z, vx, vy, vz] state vector with ground impact interpolated to y=0.",
-        "Modeled air density with the International Standard Atmosphere troposphere, corrected for humidity, and applied quadratic drag relative to a configurable wind.",
-        "Compiled the engine to a shared library and bridged it into a FastAPI POST /api/simulate endpoint via ctypes, with Pydantic-validated inputs.",
-        "Built a vanilla HTML/CSS/JS canvas frontend that renders the trajectory and reports range, apex, time of flight, impact velocity and angle, and lateral drift.",
-        "Containerized the stack so the C unit tests and Python API tests run during the image build, with GitHub Actions CI on every push."
-      ],
-      "technicalSpecs": [
-        {
-          "label": "Scope",
-          "value": "Educational; generic 60 mm-class; no operational use"
-        },
-        {
-          "label": "Physics core",
-          "value": "C: RK4 integrator, ISA atmosphere, quadratic drag"
-        },
-        {
-          "label": "State vector",
-          "value": "[x, y, z, vx, vy, vz] integrated at up to 1 ms steps"
-        },
-        {
-          "label": "API",
-          "value": "FastAPI with a ctypes bridge to libmortar_physics.so"
-        },
-        {
-          "label": "Frontend",
-          "value": "Vanilla HTML/CSS/JS canvas trajectory renderer"
-        },
-        {
-          "label": "Outputs",
-          "value": "Range, apex, time of flight, impact velocity/angle, drift"
-        },
-        {
-          "label": "Build and CI",
-          "value": "Docker multi-stage; C + Python tests gate the build; GitHub Actions"
-        }
-      ]
-    },
-    {
-      "id": "sparse-gpu-kernels",
-      "title": "Sparse GPU Kernels",
-      "image": "/projects/sparse-gpu-kernels.svg",
-      "imageAlt": "Sparse matrix blocks flowing through a stylized GPU compute grid",
-      "subtitle": "Sputnik paper reproduction across a modern GPU generation",
-      "period": "December 2025 - January 2026",
-      "categories": [
-        "CUDA"
-      ],
-      "technologies": [
-        "CUDA",
-        "C++",
-        "Docker",
-        "NVIDIA NGC",
-        "cuSPARSE",
-        "cuBLAS"
-      ],
-      "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
-      "summary": "Reproduced and benchmarked the Sputnik sparse-matrix CUDA kernels from Gale et al. (SC '20) on an RTX 4070 Super, validating that the paper's sparsity crossover behavior transfers across GPU generations.",
-      "metrics": [
-        {
-          "value": "7.8x",
-          "label": "speedup over dense cuBLAS",
-          "context": "Measured at 99% sparsity."
-        },
-        {
-          "value": "4.3 TFLOPs",
-          "label": "peak SpMM throughput",
-          "context": "Recorded on an NVIDIA RTX 4070 Super."
-        },
-        {
-          "value": "70.5%",
-          "label": "sparsity break-even point",
-          "context": "Reproduced against the paper's approximately 71% result on V100."
-        }
-      ],
-      "highlights": [
-        "Deployed the Sputnik CUDA library inside an NVIDIA NGC container.",
-        "Adapted the container configuration for current Linux kernel and NVIDIA driver versions.",
-        "Benchmarked SpMM and SDDMM kernels against cuSPARSE and dense cuBLAS baselines.",
-        "Confirmed that sparse-kernel efficiency and the break-even threshold scale across GPU generations."
-      ],
-      "technicalSpecs": [
-        {
-          "label": "Workloads",
-          "value": "SpMM and SDDMM"
-        },
-        {
-          "label": "GPU",
-          "value": "NVIDIA GeForce RTX 4070 Super"
-        },
-        {
-          "label": "Baseline",
-          "value": "cuSPARSE and dense cuBLAS"
-        },
-        {
-          "label": "Source paper",
-          "value": "Gale et al., SC '20"
-        },
-        {
-          "label": "Environment",
-          "value": "NVIDIA NGC container on an updated Linux and NVIDIA driver stack"
-        }
-      ]
-    },
-    {
-      "id": "jetson-nano-inference",
-      "title": "Neural Network Inference on NVIDIA Jetson Nano",
-      "image": "/projects/jetson-nano-inference.svg",
-      "imageAlt": "Neural network inference graph connected to an embedded Jetson module",
-      "subtitle": "TensorRT model comparison and embedded GPU profiling",
-      "period": "December 2025",
-      "categories": [
-        "Robotics",
-        "CUDA",
-        "Computer Vision"
-      ],
-      "technologies": [
-        "Python",
-        "CUDA",
-        "TensorRT",
-        "Docker",
-        "nvprof",
-        "NVIDIA Jetson Nano"
-      ],
-      "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
-      "summary": "Deployed three TensorRT-optimized object-detection networks on Jetson Nano and profiled their latency and streaming-multiprocessor efficiency to identify the fastest model and the dominant post-processing bottleneck.",
-      "metrics": [
-        {
-          "value": "~650 ms",
-          "label": "PeopleNet inference per image",
-          "context": "Fastest of the three evaluated models on the embedded GPU."
-        },
-        {
-          "value": "99.9%",
-          "label": "peak SM utilization",
-          "context": "Reached by fused convolution kernels."
-        },
-        {
-          "value": "~12.6%",
-          "label": "NMS SM efficiency",
-          "context": "Identified as the primary post-processing bottleneck."
-        }
-      ],
-      "highlights": [
-        "Deployed PeopleNet, SSD-Inception-v2, and SSD-MobileNet-v2 with TensorRT optimization.",
-        "Compared end-to-end inference performance on the Jetson Nano's Tegra X1 GPU.",
-        "Profiled streaming-multiprocessor efficiency across each model with nvprof.",
-        "Traced the principal performance limitation to non-maximum suppression rather than convolution."
-      ],
-      "technicalSpecs": [
-        {
-          "label": "Platform",
-          "value": "NVIDIA Jetson Nano"
-        },
-        {
-          "label": "SoC",
-          "value": "NVIDIA Tegra X1"
-        },
-        {
-          "label": "Models",
-          "value": "PeopleNet, SSD-Inception-v2, SSD-MobileNet-v2"
-        },
-        {
-          "label": "Runtime",
-          "value": "TensorRT"
-        },
-        {
-          "label": "Profiler",
-          "value": "nvprof"
-        }
-      ]
-    },
-    {
-      "id": "computer-vision-portfolio",
-      "title": "Computer Vision Project Portfolio",
-      "image": "/projects/computer-vision-portfolio.svg",
-      "imageAlt": "Computer vision targeting reticle analyzing a geometric scene",
-      "subtitle": "People counting and retinal vessel extraction",
-      "period": "December 2025 - January 2026",
-      "categories": [
-        "Computer Vision"
-      ],
-      "technologies": [
-        "Python",
-        "OpenCV",
-        "scikit-learn",
-        "scikit-fuzzy",
-        "MLP",
-        "Fuzzy C-Means"
-      ],
-      "repository": "https://github.com/Ursidae0/ImageUnderstanding",
-      "summary": "A two-part computer-vision portfolio covering morphology-driven crowd estimation and a Python reproduction of a hybrid retinal blood-vessel extraction pipeline evaluated on the DRIVE dataset.",
-      "metrics": [
-        {
-          "value": "10.64%",
-          "label": "best people-counting MAPE",
-          "context": "Produced by the strongest morphological-feature method."
-        },
-        {
-          "value": "86.27%",
-          "label": "estimates within 15%",
-          "context": "Share of crowd-count estimates within 15% of ground truth."
-        },
-        {
-          "value": "0.86",
-          "label": "retinal extraction AUC",
-          "context": "Measured on the DRIVE test set."
-        },
-        {
-          "value": "92.6%",
-          "label": "pixel accuracy",
-          "context": "Measured on the DRIVE test set."
-        }
-      ],
-      "highlights": [
-        "Extracted closing- and opening-based morphological features from foreground masks.",
-        "Trained an MLP regressor to estimate crowd count from the engineered features.",
-        "Reimplemented a MATLAB hybrid Fuzzy C-Means and supervised-classification retinal pipeline in Python.",
-        "Attributed the remaining gap from the paper's reported 0.975 AUC to its proprietary Root Guided Decision Tree, which is unavailable in standard machine-learning libraries."
-      ],
-      "technicalSpecs": [
-        {
-          "label": "People-counting model",
-          "value": "Multi-layer perceptron"
-        },
-        {
-          "label": "Feature pipeline",
-          "value": "Foreground masks with morphological closing and opening"
-        },
-        {
-          "label": "Retinal dataset",
-          "value": "DRIVE test set"
-        },
-        {
-          "label": "Retinal pipeline",
-          "value": "Hybrid Fuzzy C-Means plus supervised classification"
-        },
-        {
-          "label": "Paper reference",
-          "value": "Reported AUC 0.975 with a proprietary Root Guided Decision Tree"
-        }
-      ]
-    }
-  ]
+    "projects": [
+      {
+        "id": "eol-vibration-defect-detection",
+        "title": "EOL Titreşimle Arıza Tespiti",
+        "period": "Haziran 2026",
+        "categories": ["Sinyal İşleme", "Makine Öğrenmesi"],
+        "technologies": ["Python", "NumPy", "SciPy", "scikit-learn", "Docker", "pytest"],
+        "repository": "https://github.com/Ursidae0/eol-vibration-defect-detection",
+        "summary": "Herkese açık CWRU veri seti üzerine kurulu bir rulman arıza tespit çalışması. Asıl amacım, veri sızıntısı olmadan dürüst bir değerlendirmeydi. Arıza izlerini bulmak için zarf analizi, basit bir fizik tabanlı geçti/kaldı kontrolü ve bir RandomForest modeli kullanıyorum; sonra modelin farklı motor yükü ve arıza büyüklüğünde ne kadar dayandığını test ediyorum.",
+        "metrics": [
+          {
+            "value": "100%",
+            "label": "arıza tespit oranı",
+            "context": "Fizik tabanlı dedektör, sağlam rulmanlarda hiç yanlış alarm vermeden tüm arızaları yakaladı."
+          },
+          {
+            "value": "0.22",
+            "label": "karışık etiketlerde skor",
+            "context": "Etiketleri karıştırdığımda doğruluk şans seviyesine (yaklaşık 0.28) düştü. Yani gerçek 0.99 skoru sızıntı değil, gerçek sinyal."
+          },
+          {
+            "value": "0.81",
+            "label": "görülmemiş arıza boyutlarında doğruluk",
+            "context": "Modelin hiç görmediği bir arıza boyutunda test ederken ortalama; en zor durumda 0.60'a iniyor ki bu da dürüst sınır."
+          }
+        ],
+        "highlights": [
+          "SKF 6205 geometrisinden rulman arıza frekanslarını (BPFO, BPFI, BSF, FTF) hesapladım ve arıza darbelerini bant geçiren filtre ile Hilbert zarfı kullanarak ayırdım.",
+          "Sağlam kayıtların hem eğitim hem test setine sızdığını fark ettim, bölünmeyi düzelttim ve aynı dosyanın bir daha ikisinde birden görünmemesi için kontroller ekledim.",
+          "Yüke göre ve arıza boyutuna göre ayrılmış testlerde dengeli doğruluk ve makro-F1 raporladım, ayrıca karışık etiketli bir kontrol testi yaptım.",
+          "Arıza boyutları arasında sonucu iyileştirmek için genliğe bağlı olmayan bir öznitelik seti denedim ve olumsuz sonucu saklamadan raporladım.",
+          "Her sayıyı, metrics.json yazan tek bir sabit tohumlu betikten, tamamen Docker içinde tekrar üretilebilir yaptım."
+        ],
+        "technicalSpecs": [
+          { "label": "Veri seti", "value": "CWRU Rulman Veri Merkezi, 12 kHz'de 40 kayıt" },
+          { "label": "Rulman", "value": "SKF 6205, tahrik tarafı" },
+          { "label": "Öznitelikler", "value": "Zaman alanı istatistikleri ve Hilbert zarf bant enerjileri" },
+          { "label": "Model", "value": "Dosya düzeyinde GroupKFold ile RandomForest" },
+          { "label": "Değerlendirme", "value": "Sızıntısız bölmeler, dengeli metrikler, permütasyon testi" },
+          { "label": "Ortam", "value": "Docker, deterministik metrics.json" }
+        ]
+      },
+      {
+        "id": "mortar-ballistic-simulation",
+        "title": "Havan Balistik Simülasyonu",
+        "period": "Nisan 2026",
+        "categories": ["Simülasyon", "Sistemler"],
+        "technologies": ["C", "Python", "FastAPI", "ctypes", "CMake", "Docker", "JavaScript"],
+        "repository": "https://github.com/Ursidae0/MortarSimulation",
+        "summary": "Sayısal yöntemleri ve fizik modellemeyi pratik etmek için yapılmış, genel bir 60 mm'lik mermi için eğitim amaçlı uçuş simülatörü. C ile yazılmış bir motor, yörüngeyi 4. derece Runge-Kutta yöntemiyle çözüyor; hava sürtünmesini, rüzgârı ve neme göre düzeltilmiş standart atmosferi içeriyor. Bir FastAPI servisi arkasında basit bir canvas çizimiyle çalışıyor. Yalnızca ders kitabı fiziği ve herkese açık değerler kullanır; gerçek hedefleme veya askeri kullanım yoktur.",
+        "metrics": [
+          {
+            "value": "RK4",
+            "label": "yörünge çözücü",
+            "context": "Tüm [x, y, z, vx, vy, vz] durumu üzerinde 4. derece Runge-Kutta; adımlar 1 ms'ye kadar iner ve yere çarpma y = 0'a interpolasyonla bulunur."
+          },
+          {
+            "value": "10",
+            "label": "fizik girdisi",
+            "context": "Namlu hızı, yükseliş açısı, azimut, kütle, çap, sürtünme katsayısı, atış yüksekliği, rüzgâr hızı ve yönü, ve nem."
+          },
+          {
+            "value": "C + Python",
+            "label": "motor ve API",
+            "context": "C fizik çekirdeği paylaşımlı kütüphaneye derlenir ve ctypes ile bir FastAPI servisinden çağrılır; arayüz sade JavaScript canvas'tır."
+          }
+        ],
+        "highlights": [
+          "Fizik çekirdeğini C ile yazdım: tüm durum vektörü üzerinde bir RK4 çözücü; yere çarpma y = 0'a interpolasyonla bulunuyor.",
+          "Hava yoğunluğunu Uluslararası Standart Atmosfer ile modelledim, neme göre düzelttim ve ayarlanabilir rüzgâra göre kuadratik sürtünme uyguladım.",
+          "Motoru paylaşımlı kütüphaneye derledim ve doğrulanmış girdilerle ctypes üzerinden bir FastAPI uç noktasına bağladım.",
+          "Yörüngeyi çizen ve menzil, tepe noktası, uçuş süresi, çarpma hızı ve açısı ile yanal kaymayı gösteren sade bir HTML/CSS/JavaScript canvas sayfası yaptım.",
+          "Projeyi konteyner haline getirdim; böylece C birim testleri ve Python API testleri imaj derlenirken çalışıyor, her push'ta GitHub Actions ile."
+        ],
+        "technicalSpecs": [
+          { "label": "Kapsam", "value": "Eğitim amaçlı; genel 60 mm sınıfı; operasyonel kullanım yok" },
+          { "label": "Fizik çekirdeği", "value": "C: RK4 çözücü, standart atmosfer, kuadratik sürtünme" },
+          { "label": "Durum", "value": "[x, y, z, vx, vy, vz], 1 ms'ye kadar adımlar" },
+          { "label": "API", "value": "C kütüphanesine ctypes köprüsü olan FastAPI" },
+          { "label": "Arayüz", "value": "Sade HTML/CSS/JavaScript canvas" },
+          { "label": "Çıktılar", "value": "Menzil, tepe noktası, uçuş süresi, çarpma hızı/açısı, kayma" },
+          { "label": "Derleme ve CI", "value": "Çok aşamalı Docker; C ve Python testleri derlemeyi denetler; GitHub Actions" }
+        ]
+      },
+      {
+        "id": "sparse-gpu-kernels",
+        "title": "Seyrek GPU Çekirdekleri",
+        "period": "Aralık 2025 - Ocak 2026",
+        "categories": ["CUDA"],
+        "technologies": ["CUDA", "C++", "Docker", "NVIDIA NGC", "cuSPARSE", "cuBLAS"],
+        "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+        "summary": "2020 tarihli bir araştırma makalesindeki (Gale ve ark.) Sputnik seyrek matris CUDA çekirdeklerini modern bir RTX 4070 Super üzerinde yeniden ürettim ve test ettim; amacım makalenin sonuçlarının daha yeni bir GPU neslinde de geçerli olup olmadığını görmekti.",
+        "metrics": [
+          {
+            "value": "7.8x",
+            "label": "yoğun cuBLAS'tan hızlı",
+            "context": "Matris değerlerinin neredeyse tamamının sıfır olduğu %99 seyreklikte ölçüldü."
+          },
+          {
+            "value": "4.3 TFLOPs",
+            "label": "en yüksek SpMM verimi",
+            "context": "NVIDIA RTX 4070 Super üzerinde ölçüldü."
+          },
+          {
+            "value": "70.5%",
+            "label": "başabaş seyreklik",
+            "context": "Seyrek çekirdeğin yoğun olanı geçmeye başladığı nokta; makalenin daha eski V100 GPU'daki yaklaşık %71 sonucuna yakın."
+          }
+        ],
+        "highlights": [
+          "Sputnik CUDA kütüphanesini bir NVIDIA NGC konteyneri içinde çalıştırdım.",
+          "Konteyner kurulumunu güncel Linux çekirdeği ve NVIDIA sürücü sürümleriyle çalışacak şekilde güncelledim.",
+          "SpMM ve SDDMM çekirdeklerini cuSPARSE ve yoğun cuBLAS ile karşılaştırdım.",
+          "Seyrek çekirdek hızlanmasının ve başabaş noktasının daha yeni bir GPU neslinde de geçerli olduğunu doğruladım."
+        ],
+        "technicalSpecs": [
+          { "label": "İş yükleri", "value": "SpMM ve SDDMM" },
+          { "label": "GPU", "value": "NVIDIA GeForce RTX 4070 Super" },
+          { "label": "Karşılaştırma", "value": "cuSPARSE ve yoğun cuBLAS" },
+          { "label": "Kaynak makale", "value": "Gale ve ark., SC '20" },
+          { "label": "Ortam", "value": "Güncellenmiş Linux ve sürücü yığını üzerinde NVIDIA NGC konteyneri" }
+        ]
+      },
+      {
+        "id": "jetson-nano-inference",
+        "title": "NVIDIA Jetson Nano Üzerinde Sinir Ağı Çıkarımı",
+        "period": "Aralık 2025",
+        "categories": ["Robotik", "CUDA", "Bilgisayarlı Görü"],
+        "technologies": ["Python", "CUDA", "TensorRT", "Docker", "nvprof", "NVIDIA Jetson Nano"],
+        "repository": "https://github.com/Ursidae0/Heterogeneous_Parallel_Programming",
+        "summary": "Bir Jetson Nano üzerinde TensorRT ile üç nesne tespit sinir ağı çalıştırdım ve hızlarını ile GPU kullanımlarını ölçtüm; amacım en hızlı modeli ve ana darboğazı bulmaktı.",
+        "metrics": [
+          {
+            "value": "~650 ms",
+            "label": "en hızlı model (görüntü başına)",
+            "context": "PeopleNet, Jetson Nano'nun GPU'sunda üçü arasında en hızlısıydı."
+          },
+          {
+            "value": "99.9%",
+            "label": "en yüksek GPU kullanımı",
+            "context": "Birleştirilmiş konvolüsyon çekirdekleriyle ulaşıldı."
+          },
+          {
+            "value": "~12.6%",
+            "label": "NMS sırasında GPU kullanımı",
+            "context": "Asıl darboğaz konvolüsyonlar değil, maksimum olmayan bastırma (NMS) adımıydı."
+          }
+        ],
+        "highlights": [
+          "PeopleNet, SSD-Inception-v2 ve SSD-MobileNet-v2 modellerini TensorRT ile çalıştırdım.",
+          "Jetson Nano'nun Tegra X1 GPU'sunda uçtan uca hızlarını karşılaştırdım.",
+          "Her modelin GPU (streaming-multiprocessor) kullanımını nvprof ile inceledim.",
+          "Asıl darboğazın konvolüsyon katmanları değil, maksimum olmayan bastırma olduğunu buldum."
+        ],
+        "technicalSpecs": [
+          { "label": "Platform", "value": "NVIDIA Jetson Nano" },
+          { "label": "Çip", "value": "NVIDIA Tegra X1" },
+          { "label": "Modeller", "value": "PeopleNet, SSD-Inception-v2, SSD-MobileNet-v2" },
+          { "label": "Çalışma zamanı", "value": "TensorRT" },
+          { "label": "Profilleyici", "value": "nvprof" }
+        ]
+      },
+      {
+        "id": "computer-vision-portfolio",
+        "title": "Bilgisayarlı Görü Proje Portföyü",
+        "period": "Aralık 2025 - Ocak 2026",
+        "categories": ["Bilgisayarlı Görü"],
+        "technologies": ["Python", "OpenCV", "scikit-learn", "scikit-fuzzy", "MLP", "Fuzzy C-Means"],
+        "repository": "https://github.com/Ursidae0/ImageUnderstanding",
+        "summary": "İki bilgisayarlı görü projesi: görüntülerde şekil (morfoloji) özniteliklerini kullanarak insan sayma ve retina görüntülerinden kan damarlarını çıkarma. İkincisi, yayımlanmış bir yöntemin Python ile yeniden yazılmış hâli olup DRIVE veri setinde test edildi.",
+        "metrics": [
+          {
+            "value": "10.64%",
+            "label": "en iyi insan sayma hatası",
+            "context": "En güçlü şekil-özniteliği yönteminden elde edilen ortalama hata (MAPE)."
+          },
+          {
+            "value": "86.27%",
+            "label": "%15 içindeki tahminler",
+            "context": "Gerçek sayıya %15 yakınlıkta olan kalabalık tahminlerinin oranı."
+          },
+          {
+            "value": "0.86",
+            "label": "damar çıkarma AUC",
+            "context": "DRIVE retina test setinde, %92.6 piksel doğruluğuyla ölçüldü."
+          }
+        ],
+        "highlights": [
+          "Ön plan maskelerinden morfolojik kapama ve açma kullanarak şekil öznitelikleri çıkardım.",
+          "Bu özniteliklerden insan sayısını tahmin etmek için bir MLP modeli eğittim.",
+          "Bir MATLAB retina-damar yöntemini (Fuzzy C-Means artı denetimli sınıflandırma) Python'a yeniden yazdım.",
+          "Makalenin bildirdiği 0.975 AUC ile aramdaki farkı, standart kütüphanelerde bulunmayan özel Root Guided Decision Tree'ye bağladım ve bunu dürüstçe raporladım."
+        ],
+        "technicalSpecs": [
+          { "label": "İnsan sayma modeli", "value": "Çok katmanlı algılayıcı (MLP)" },
+          { "label": "Öznitelik hattı", "value": "Morfolojik kapama ve açma ile ön plan maskeleri" },
+          { "label": "Retina veri seti", "value": "DRIVE test seti" },
+          { "label": "Retina hattı", "value": "Hibrit Fuzzy C-Means artı denetimli sınıflandırma" },
+          { "label": "Referans", "value": "Makale, özel bir Root Guided Decision Tree ile 0.975 AUC bildirdi" }
+        ]
+      }
+    ]
+  }
 }

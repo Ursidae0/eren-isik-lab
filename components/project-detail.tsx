@@ -3,11 +3,16 @@
 import Link from "next/link";
 
 import { useLanguage } from "@/components/preferences-provider";
-import type { Project } from "@/lib/projects";
+import { getProjectById } from "@/lib/projects";
 
-export function ProjectDetail({ project }: { project: Project }) {
-  const { content } = useLanguage();
+export function ProjectDetail({ projectId }: { projectId: string }) {
+  const { content, locale } = useLanguage();
   const labels = content.projectDetail;
+  const project = getProjectById(projectId, locale);
+
+  if (!project) {
+    return null;
+  }
 
   return (
     <main>

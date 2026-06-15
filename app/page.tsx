@@ -8,7 +8,6 @@ import { LeafField } from "@/components/leaf-field";
 import { Navigation } from "@/components/navigation";
 import { ProfileSnapshot } from "@/components/profile-snapshot";
 import { ProjectGallery } from "@/components/project-gallery";
-import { projects } from "@/lib/projects";
 import { siteConfig } from "@/lib/site";
 
 export function generateMetadata(): Metadata {
@@ -74,7 +73,7 @@ export default function Home() {
       <Navigation />
       <main>
         <Hero />
-        <ProjectGallery projects={projects} />
+        <ProjectGallery />
         <ProfileSnapshot />
         <ContactSection />
       </main>

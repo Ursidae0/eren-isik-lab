@@ -1,15 +1,19 @@
 "use client";
 
 import { useLanguage } from "@/components/preferences-provider";
-import { education, experience, technicalSkills } from "@/lib/projects";
+import {
+  getEducation,
+  getExperience,
+  getTechnicalSkills,
+} from "@/lib/projects";
 
 export function ProfileSnapshot() {
-  const { content } = useLanguage();
+  const { content, locale } = useLanguage();
   const { about } = content;
-  const role = experience[0];
-  const school = education[0];
+  const role = getExperience(locale)[0];
+  const school = getEducation(locale)[0];
   const featuredSkills = [
-    ...technicalSkills.programming,
+    ...getTechnicalSkills(locale).programming,
     ...about.featuredSkills,
   ];
 

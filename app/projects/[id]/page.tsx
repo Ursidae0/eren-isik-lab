@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <ForestBackdrop />
       <LeafField />
       <Navigation />
-      <ProjectDetail project={project} />
+      <ProjectDetail projectId={project.id} />
       <Footer />
     </div>
   );

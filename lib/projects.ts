@@ -1,18 +1,5 @@
 import portfolioData from "@/data/projects.json";
-
-export const projectCategories = [
-  "All",
-  "Robotics",
-  "CUDA",
-  "Computer Vision",
-  "Signal Processing",
-  "Machine Learning",
-  "Simulation",
-  "Systems",
-] as const;
-
-export type ProjectCategory = (typeof projectCategories)[number];
-export type FilterableProjectCategory = Exclude<ProjectCategory, "All">;
+import { defaultLocale, type Locale } from "@/lib/content";
 
 export type ProjectMetric = {
   value: string;
@@ -28,11 +15,8 @@ export type TechnicalSpec = {
 export type Project = {
   id: string;
   title: string;
-  image: string;
-  imageAlt: string;
-  subtitle: string;
   period: string;
-  categories: FilterableProjectCategory[];
+  categories: string[];
   technologies: string[];
   repository: string;
   summary: string;
@@ -41,13 +25,31 @@ export type Project = {
   technicalSpecs: TechnicalSpec[];
 };
 
-export type Experience = (typeof portfolioData.experience)[number];
+type PortfolioData = (typeof portfolioData)["en"];
+export type Experience = PortfolioData["experience"][number];
+export type Education = PortfolioData["education"][number];
+export type TechnicalSkills = PortfolioData["technicalSkills"];
 
-export const projects = portfolioData.projects as Project[];
-export const experience = portfolioData.experience;
-export const technicalSkills = portfolioData.technicalSkills;
-export const education = portfolioData.education;
-
-export function getProjectById(id: string) {
-  return projects.find((project) => project.id === id);
+export function getProjects(locale: Locale): Project[] {
+  return portfolioData[locale].projects as Project[];
 }
+
+export function getProjectById(id: string, locale: Locale = defaultLocale) {
+  return getProjects(locale).find((project) => project.id === id);
+}
+
+export function getExperience(locale: Locale): Experience[] {
+  return portfolioData[locale].experience as Experience[];
+}
+
+export function getEducation(locale: Locale): Education[] {
+  return portfolioData[locale].education as Education[];
+}
+
+export function getTechnicalSkills(locale: Locale): TechnicalSkills {
+  return portfolioData[locale].technicalSkills as TechnicalSkills;
+}
+
+// English data for server-rendered / static surfaces: sitemap, OG images,
+// generateStaticParams, and page metadata (the canonical language).
+export const projects = getProjects(defaultLocale);
