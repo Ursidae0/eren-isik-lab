@@ -1,0 +1,180 @@
+{
+  "en": {
+    "nav": {
+      "logoLabel": "Eren Isik",
+      "homeAriaLabel": "Eren Isik home",
+      "links": [
+        { "label": "Work", "href": "/#projects" },
+        { "label": "About", "href": "/#about" },
+        { "label": "Contact", "href": "/#contact" }
+      ]
+    },
+    "hero": {
+      "eyebrow": "Embedded · Signal Processing · Simulation · GPU",
+      "headlineLines": ["Where software meets", "the physical world."],
+      "headlineEmphasis": "physical world.",
+      "summary": "I design and build systems at the boundary of software and hardware — real-time embedded control, signal processing and machine learning, numerical simulation, and GPU-accelerated computing. Computer engineering student at Izmir Institute of Technology, focused on measured results and honest evaluation.",
+      "primaryCta": { "label": "Explore my work", "href": "#projects" },
+      "secondaryCta": { "label": "Start a conversation", "href": "#contact" }
+    },
+    "projectsSection": {
+      "kicker": "Selected work",
+      "title": "A growing record of things built and measured.",
+      "intro": "Each branch follows a project from constraint to evidence: embedded control, parallel compute, and computer vision.",
+      "viewProjectLabel": "View project",
+      "cardAriaTemplate": "Read about {title}"
+    },
+    "about": {
+      "kicker": "About",
+      "lead": "I like difficult constraints and tangible outcomes.",
+      "bio": "I am a computer engineering student at Izmir Institute of Technology, drawn to problems where software has to respect physics, timing, and noisy real-world data. My work spans real-time embedded firmware, signal processing and machine learning, numerical simulation, and GPU and parallel computing. Recently I rewrote our TEKNOFEST rover's drive firmware into a 1 kHz real-time control loop, and built leakage-safe ML and physics-based simulations on the software side. I care about measured results and honest evaluation more than big-sounding numbers.",
+      "resumeLabel": "Download full resume",
+      "resumeHref": "/eren-isik-resume-2026.pdf",
+      "nowLabel": "Now",
+      "educationLabel": "Education",
+      "workingWithLabel": "Working with",
+      "atPreposition": "at",
+      "featuredSkills": ["NumPy", "SciPy", "scikit-learn", "ROS 2", "Raspberry Pi Pico", "Docker"]
+    },
+    "contact": {
+      "kicker": "Contact",
+      "title": "Let's build something useful.",
+      "copy": "I'm open to internships, engineering roles, and research collaborations — especially where software meets embedded systems, signal processing, simulation, or high-performance computing.",
+      "linkedinLabel": "Find me on LinkedIn",
+      "form": {
+        "nameLabel": "Name",
+        "namePlaceholder": "Your name",
+        "emailLabel": "Email",
+        "emailPlaceholder": "you@example.com",
+        "messageLabel": "Message",
+        "messagePlaceholder": "What are you working on?",
+        "submitLabel": "Compose email",
+        "idleStatus": "I usually reply within two days.",
+        "openingStatusTemplate": "Opening your mail app… if nothing happens, email {email} directly."
+      }
+    },
+    "footer": {
+      "copyrightName": "Eren Isik"
+    },
+    "projectDetail": {
+      "backLabel": "Back to selected work",
+      "viewRepositoryLabel": "View repository",
+      "measuredResultsLabel": "Measured results",
+      "engineeringRecordLabel": "Engineering record",
+      "technicalSpecsLabel": "Technical specifications",
+      "toolsLabel": "Tools and technologies"
+    },
+    "controls": {
+      "languageToggleAria": "Switch language",
+      "leafToggleOnAria": "Turn falling leaves off",
+      "leafToggleOffAria": "Turn falling leaves on",
+      "leafToggleLabel": "Leaves"
+    },
+    "atmosphere": {
+      "weatherLabels": {
+        "clear": "Clear",
+        "cloudy": "Cloudy",
+        "fog": "Fog",
+        "rain": "Rain",
+        "snow": "Snow"
+      },
+      "phaseLabels": {
+        "dawn": "Dawn",
+        "day": "Day",
+        "dusk": "Dusk",
+        "night": "Night"
+      },
+      "weatherUnavailable": "Weather unavailable",
+      "weatherPrefix": "Current weather"
+    }
+  },
+  "tr": {
+    "nav": {
+      "logoLabel": "Eren Işık",
+      "homeAriaLabel": "Eren Işık ana sayfa",
+      "links": [
+        { "label": "Çalışmalar", "href": "/#projects" },
+        { "label": "Hakkımda", "href": "/#about" },
+        { "label": "İletişim", "href": "/#contact" }
+      ]
+    },
+    "hero": {
+      "eyebrow": "Gömülü · Sinyal İşleme · Simülasyon · GPU",
+      "headlineLines": ["Yazılımın fiziksel dünyayla", "buluştuğu yer."],
+      "headlineEmphasis": "fiziksel dünyayla",
+      "summary": "Yazılım ile donanımın kesiştiği noktada sistemler tasarlayıp geliştiriyorum — gerçek zamanlı gömülü kontrol, sinyal işleme ve makine öğrenmesi, sayısal simülasyon ve GPU hızlandırmalı hesaplama. İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim; ölçülebilir sonuçlara ve dürüst değerlendirmeye odaklanıyorum.",
+      "primaryCta": { "label": "Çalışmalarımı keşfet", "href": "#projects" },
+      "secondaryCta": { "label": "Bir sohbet başlat", "href": "#contact" }
+    },
+    "projectsSection": {
+      "kicker": "Seçili çalışmalar",
+      "title": "Yapılan ve ölçülen şeylerin büyüyen bir kaydı.",
+      "intro": "Her dal bir projeyi kısıttan kanıta taşır: gömülü kontrol, paralel hesaplama ve bilgisayarlı görü.",
+      "viewProjectLabel": "Projeyi gör",
+      "cardAriaTemplate": "{title} hakkında oku"
+    },
+    "about": {
+      "kicker": "Hakkımda",
+      "lead": "Zorlu kısıtları ve somut sonuçları severim.",
+      "bio": "İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim; yazılımın fiziği, zamanlamayı ve gürültülü gerçek dünya verisini gözetmek zorunda olduğu problemlere ilgi duyuyorum. Çalışmalarım gerçek zamanlı gömülü yazılım, sinyal işleme ve makine öğrenmesi, sayısal simülasyon ve GPU ile paralel hesaplamayı kapsıyor. Yakın zamanda TEKNOFEST rover'ımızın sürüş yazılımını 1 kHz'lik gerçek zamanlı bir kontrol döngüsüne dönüştürdüm ve yazılım tarafında sızıntıya karşı güvenli makine öğrenmesi ile fizik tabanlı simülasyonlar geliştirdim. Kulağa iddialı gelen rakamlardan çok, ölçülebilir sonuçlara ve dürüst değerlendirmeye önem veriyorum.",
+      "resumeLabel": "Tüm özgeçmişi indir",
+      "resumeHref": "/eren-isik-resume-2026.pdf",
+      "nowLabel": "Şu an",
+      "educationLabel": "Eğitim",
+      "workingWithLabel": "Çalıştığım araçlar",
+      "atPreposition": "·",
+      "featuredSkills": ["NumPy", "SciPy", "scikit-learn", "ROS 2", "Raspberry Pi Pico", "Docker"]
+    },
+    "contact": {
+      "kicker": "İletişim",
+      "title": "Faydalı bir şeyler inşa edelim.",
+      "copy": "Stajlara, mühendislik rollerine ve araştırma iş birliklerine açığım — özellikle yazılımın gömülü sistemler, sinyal işleme, simülasyon veya yüksek başarımlı hesaplama ile kesiştiği yerlerde.",
+      "linkedinLabel": "LinkedIn'de beni bul",
+      "form": {
+        "nameLabel": "İsim",
+        "namePlaceholder": "Adınız",
+        "emailLabel": "E-posta",
+        "emailPlaceholder": "siz@ornek.com",
+        "messageLabel": "Mesaj",
+        "messagePlaceholder": "Ne üzerinde çalışıyorsunuz?",
+        "submitLabel": "E-posta oluştur",
+        "idleStatus": "Genellikle iki gün içinde yanıt veririm.",
+        "openingStatusTemplate": "Posta uygulamanız açılıyor… bir şey olmazsa doğrudan {email} adresine yazın."
+      }
+    },
+    "footer": {
+      "copyrightName": "Eren Işık"
+    },
+    "projectDetail": {
+      "backLabel": "Seçili çalışmalara dön",
+      "viewRepositoryLabel": "Depoyu görüntüle",
+      "measuredResultsLabel": "Ölçülen sonuçlar",
+      "engineeringRecordLabel": "Mühendislik kaydı",
+      "technicalSpecsLabel": "Teknik özellikler",
+      "toolsLabel": "Araçlar ve teknolojiler"
+    },
+    "controls": {
+      "languageToggleAria": "Dili değiştir",
+      "leafToggleOnAria": "Düşen yaprakları kapat",
+      "leafToggleOffAria": "Düşen yaprakları aç",
+      "leafToggleLabel": "Yapraklar"
+    },
+    "atmosphere": {
+      "weatherLabels": {
+        "clear": "Açık",
+        "cloudy": "Bulutlu",
+        "fog": "Sis",
+        "rain": "Yağmur",
+        "snow": "Kar"
+      },
+      "phaseLabels": {
+        "dawn": "Şafak",
+        "day": "Gündüz",
+        "dusk": "Akşam",
+        "night": "Gece"
+      },
+      "weatherUnavailable": "Hava durumu yok",
+      "weatherPrefix": "Güncel hava"
+    }
+  }
+}
