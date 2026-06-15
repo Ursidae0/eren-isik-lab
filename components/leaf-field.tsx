@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import { useAmbient } from "@/components/ambient-provider";
+import { useLeaves } from "@/components/preferences-provider";
 import {
   defaultAmbientConditions,
   getParticleProfile,
@@ -66,16 +67,16 @@ function createLeaf(
   colors: string[],
   randomY = true,
 ): Leaf {
-  const size = 12 + Math.random() * 13;
+  const size = 11 + Math.random() * 11;
 
   return {
     x: Math.random() * width,
     y: randomY ? Math.random() * height : -size - Math.random() * 120,
     size,
-    speed: 22 + Math.random() * 32,
-    sway: 22 + Math.random() * 52,
+    speed: 13 + Math.random() * 18,
+    sway: 16 + Math.random() * 30,
     phase: Math.random() * Math.PI * 2,
-    phaseSpeed: 0.28 + Math.random() * 0.34,
+    phaseSpeed: 0.18 + Math.random() * 0.22,
     rotation: Math.random() * Math.PI * 2,
     rotationSpeed: (Math.random() - 0.5) * 0.75,
     offsetX: 0,
@@ -83,7 +84,7 @@ function createLeaf(
     velocityX: 0,
     velocityY: 0,
     color: colors[Math.floor(Math.random() * colors.length)],
-    opacity: 0.28 + Math.random() * 0.2,
+    opacity: 0.18 + Math.random() * 0.14,
     variant: Math.floor(Math.random() * 3),
   };
 }
@@ -191,6 +192,7 @@ function getParticlePalette(
 export function LeafField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { conditions } = useAmbient();
+  const { leavesEnabled } = useLeaves();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -251,7 +253,7 @@ export function LeafField() {
     let windClock = 0;
 
     const resetParticles = () => {
-      const baseLeafDensity = narrowViewport.matches ? 9 : 17;
+      const baseLeafDensity = narrowViewport.matches ? 5 : 10;
       const precipitationFactor = narrowViewport.matches ? 0.78 : 1;
       const seasonalLeafFactor =
         localWeather && activeConditions.season === "winter" ? 0 : 1;
@@ -259,7 +261,7 @@ export function LeafField() {
         profile.leafFactor === 0 || seasonalLeafFactor === 0
           ? 0
           : Math.max(
-              4,
+              3,
               Math.round(
                 baseLeafDensity *
                   profile.leafFactor *
@@ -459,6 +461,7 @@ export function LeafField() {
     const start = () => {
       if (
         isRunning ||
+        !leavesEnabled ||
         reducedMotion.matches ||
         saveData ||
         document.visibilityState !== "visible"
@@ -514,7 +517,7 @@ export function LeafField() {
       document.removeEventListener("visibilitychange", handleEnvironmentChange);
       reducedMotion.removeEventListener("change", handleEnvironmentChange);
     };
-  }, [conditions]);
+  }, [conditions, leavesEnabled]);
 
   return <canvas ref={canvasRef} aria-hidden="true" className="leaf-canvas" />;
 }

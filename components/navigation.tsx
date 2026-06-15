@@ -2,6 +2,7 @@
 
 import { AtmosphereStatus } from "@/components/atmosphere-control";
 import { LanguageToggle } from "@/components/language-toggle";
+import { LeafToggle } from "@/components/leaf-toggle";
 import { useLanguage } from "@/components/preferences-provider";
 
 export function Navigation() {
@@ -29,6 +30,7 @@ export function Navigation() {
 
         <div className="nav-controls">
           <LanguageToggle />
+          <LeafToggle />
           <AtmosphereStatus />
         </div>
       </nav>
