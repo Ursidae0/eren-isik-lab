@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { AmbientProvider } from "@/components/ambient-provider";
+import { PreferencesProvider } from "@/components/preferences-provider";
+import { PreferencesScript } from "@/components/preferences-script";
 import { siteConfig } from "@/lib/site";
 
 import "@fontsource-variable/jetbrains-mono";
@@ -53,7 +55,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        <AmbientProvider>{children}</AmbientProvider>
+        <PreferencesScript />
+        <PreferencesProvider>
+          <AmbientProvider>{children}</AmbientProvider>
+        </PreferencesProvider>
       </body>
     </html>
   );
