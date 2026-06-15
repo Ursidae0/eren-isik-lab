@@ -24,47 +24,6 @@
     },
     "projects": [
       {
-        "id": "eol-vibration-defect-detection",
-        "title": "EOL Vibration Defect Detection",
-        "period": "June 2026",
-        "categories": ["Signal Processing", "Machine Learning"],
-        "technologies": ["Python", "NumPy", "SciPy", "scikit-learn", "Docker", "pytest"],
-        "repository": "https://github.com/Ursidae0/eol-vibration-defect-detection",
-        "summary": "A bearing fault detector built on the public CWRU dataset. My main goal was an honest evaluation with no data leakage. I use envelope analysis to find fault signatures, a simple physics-based pass/fail check, and a RandomForest model, then test how well it holds up across different motor loads and fault sizes.",
-        "metrics": [
-          {
-            "value": "100%",
-            "label": "fault detection rate",
-            "context": "The physics-based detector caught every fault with no false alarms on healthy bearings."
-          },
-          {
-            "value": "0.22",
-            "label": "score on shuffled labels",
-            "context": "When I shuffled the labels, accuracy dropped to chance (about 0.28). So the real 0.99 score is genuine signal, not leakage."
-          },
-          {
-            "value": "0.81",
-            "label": "accuracy on unseen fault sizes",
-            "context": "Average when tested on a fault size the model never saw; it drops to 0.60 on the hardest case, which is the honest limit."
-          }
-        ],
-        "highlights": [
-          "Computed the bearing fault frequencies (BPFO, BPFI, BSF, FTF) from the SKF 6205 geometry, and isolated the fault impulses with a band-pass filter and a Hilbert envelope.",
-          "Found that healthy recordings were leaking into both the training and test sets, fixed the split, and added checks so the same file can never appear in both again.",
-          "Reported balanced accuracy and macro-F1 across leave-one-load-out and leave-one-severity-out tests, plus a shuffled-label sanity check.",
-          "Tried an amplitude-independent feature set to improve results across fault sizes, and reported the negative result instead of hiding it.",
-          "Made every number reproducible from one fixed-seed script that writes metrics.json, all inside Docker."
-        ],
-        "technicalSpecs": [
-          { "label": "Dataset", "value": "CWRU Bearing Data Center, 40 recordings at 12 kHz" },
-          { "label": "Bearing", "value": "SKF 6205, drive end" },
-          { "label": "Features", "value": "Time-domain statistics and Hilbert envelope band energies" },
-          { "label": "Model", "value": "RandomForest with file-level GroupKFold" },
-          { "label": "Evaluation", "value": "Leakage-safe splits, balanced metrics, permutation test" },
-          { "label": "Environment", "value": "Docker, deterministic metrics.json" }
-        ]
-      },
-      {
         "id": "mortar-ballistic-simulation",
         "title": "Mortar Ballistic Simulation",
         "period": "April 2026",
@@ -249,47 +208,6 @@
       "languages": ["Türkçe - Ana dil", "İngilizce - B2"]
     },
     "projects": [
-      {
-        "id": "eol-vibration-defect-detection",
-        "title": "EOL Titreşimle Arıza Tespiti",
-        "period": "Haziran 2026",
-        "categories": ["Sinyal İşleme", "Makine Öğrenmesi"],
-        "technologies": ["Python", "NumPy", "SciPy", "scikit-learn", "Docker", "pytest"],
-        "repository": "https://github.com/Ursidae0/eol-vibration-defect-detection",
-        "summary": "Herkese açık CWRU veri seti üzerine kurulu bir rulman arıza tespit çalışması. Asıl amacım, veri sızıntısı olmadan dürüst bir değerlendirmeydi. Arıza izlerini bulmak için zarf analizi, basit bir fizik tabanlı geçti/kaldı kontrolü ve bir RandomForest modeli kullanıyorum; sonra modelin farklı motor yükü ve arıza büyüklüğünde ne kadar dayandığını test ediyorum.",
-        "metrics": [
-          {
-            "value": "100%",
-            "label": "arıza tespit oranı",
-            "context": "Fizik tabanlı dedektör, sağlam rulmanlarda hiç yanlış alarm vermeden tüm arızaları yakaladı."
-          },
-          {
-            "value": "0.22",
-            "label": "karışık etiketlerde skor",
-            "context": "Etiketleri karıştırdığımda doğruluk şans seviyesine (yaklaşık 0.28) düştü. Yani gerçek 0.99 skoru sızıntı değil, gerçek sinyal."
-          },
-          {
-            "value": "0.81",
-            "label": "görülmemiş arıza boyutlarında doğruluk",
-            "context": "Modelin hiç görmediği bir arıza boyutunda test ederken ortalama; en zor durumda 0.60'a iniyor ki bu da dürüst sınır."
-          }
-        ],
-        "highlights": [
-          "SKF 6205 geometrisinden rulman arıza frekanslarını (BPFO, BPFI, BSF, FTF) hesapladım ve arıza darbelerini bant geçiren filtre ile Hilbert zarfı kullanarak ayırdım.",
-          "Sağlam kayıtların hem eğitim hem test setine sızdığını fark ettim, bölünmeyi düzelttim ve aynı dosyanın bir daha ikisinde birden görünmemesi için kontroller ekledim.",
-          "Yüke göre ve arıza boyutuna göre ayrılmış testlerde dengeli doğruluk ve makro-F1 raporladım, ayrıca karışık etiketli bir kontrol testi yaptım.",
-          "Arıza boyutları arasında sonucu iyileştirmek için genliğe bağlı olmayan bir öznitelik seti denedim ve olumsuz sonucu saklamadan raporladım.",
-          "Her sayıyı, metrics.json yazan tek bir sabit tohumlu betikten, tamamen Docker içinde tekrar üretilebilir yaptım."
-        ],
-        "technicalSpecs": [
-          { "label": "Veri seti", "value": "CWRU Rulman Veri Merkezi, 12 kHz'de 40 kayıt" },
-          { "label": "Rulman", "value": "SKF 6205, tahrik tarafı" },
-          { "label": "Öznitelikler", "value": "Zaman alanı istatistikleri ve Hilbert zarf bant enerjileri" },
-          { "label": "Model", "value": "Dosya düzeyinde GroupKFold ile RandomForest" },
-          { "label": "Değerlendirme", "value": "Sızıntısız bölmeler, dengeli metrikler, permütasyon testi" },
-          { "label": "Ortam", "value": "Docker, deterministik metrics.json" }
-        ]
-      },
       {
         "id": "mortar-ballistic-simulation",
         "title": "Havan Balistik Simülasyonu",
