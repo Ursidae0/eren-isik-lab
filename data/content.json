@@ -13,22 +13,22 @@
       "eyebrow": "Embedded · Signal Processing · Simulation · GPU",
       "headlineLines": ["Where software meets", "the physical world."],
       "headlineEmphasis": "physical world.",
-      "summary": "I design and build systems at the boundary of software and hardware — real-time embedded control, signal processing and machine learning, numerical simulation, and GPU-accelerated computing. Computer engineering student at Izmir Institute of Technology, focused on measured results and honest evaluation.",
-      "primaryCta": { "label": "Explore my work", "href": "#projects" },
-      "secondaryCta": { "label": "Start a conversation", "href": "#contact" }
+      "summary": "I build software that works closely with hardware: real-time control on small devices, signal processing and machine learning, physics simulations, and GPU computing. I am a computer engineering student at Izmir Institute of Technology, and I care about real, measured results.",
+      "primaryCta": { "label": "See my work", "href": "#projects" },
+      "secondaryCta": { "label": "Get in touch", "href": "#contact" }
     },
     "projectsSection": {
-      "kicker": "Selected work",
-      "title": "A growing record of things built and measured.",
-      "intro": "Each branch follows a project from constraint to evidence: embedded control, parallel compute, and computer vision.",
+      "kicker": "Selected projects",
+      "title": "Things I have built and measured.",
+      "intro": "A few projects across embedded systems, GPU computing, and computer vision, with the results I measured for each one.",
       "viewProjectLabel": "View project",
       "cardAriaTemplate": "Read about {title}"
     },
     "about": {
       "kicker": "About",
-      "lead": "I like difficult constraints and tangible outcomes.",
-      "bio": "I am a computer engineering student at Izmir Institute of Technology, drawn to problems where software has to respect physics, timing, and noisy real-world data. My work spans real-time embedded firmware, signal processing and machine learning, numerical simulation, and GPU and parallel computing. Recently I rewrote our TEKNOFEST rover's drive firmware into a 1 kHz real-time control loop, and built leakage-safe ML and physics-based simulations on the software side. I care about measured results and honest evaluation more than big-sounding numbers.",
-      "resumeLabel": "Download full resume",
+      "lead": "I like hard problems with real, measurable results.",
+      "bio": "I am a computer engineering student at Izmir Institute of Technology. I enjoy problems where software has to deal with real-world physics, timing, and noisy data. I work on real-time embedded firmware, signal processing and machine learning, physics simulations, and GPU computing. Recently I rewrote our TEKNOFEST rover's motor firmware into a 1 kHz real-time control loop. I try to measure my results honestly instead of trusting big-sounding numbers.",
+      "resumeLabel": "Download my resume",
       "resumeHref": "/eren-isik-resume-2026.pdf",
       "nowLabel": "Now",
       "educationLabel": "Education",
@@ -39,7 +39,7 @@
     "contact": {
       "kicker": "Contact",
       "title": "Let's build something useful.",
-      "copy": "I'm open to internships, engineering roles, and research collaborations — especially where software meets embedded systems, signal processing, simulation, or high-performance computing.",
+      "copy": "I am looking for internships and engineering roles, and I am happy to talk about research. I am most interested in embedded systems, signal processing, simulation, and high-performance computing.",
       "linkedinLabel": "Find me on LinkedIn",
       "form": {
         "nameLabel": "Name",
@@ -48,7 +48,7 @@
         "emailPlaceholder": "you@example.com",
         "messageLabel": "Message",
         "messagePlaceholder": "What are you working on?",
-        "submitLabel": "Compose email",
+        "submitLabel": "Write email",
         "idleStatus": "I usually reply within two days.",
         "openingStatusTemplate": "Opening your mail app… if nothing happens, email {email} directly."
       }
@@ -57,11 +57,11 @@
       "copyrightName": "Eren Isik"
     },
     "projectDetail": {
-      "backLabel": "Back to selected work",
-      "viewRepositoryLabel": "View repository",
+      "backLabel": "Back to projects",
+      "viewRepositoryLabel": "View code",
       "measuredResultsLabel": "Measured results",
-      "engineeringRecordLabel": "Engineering record",
-      "technicalSpecsLabel": "Technical specifications",
+      "engineeringRecordLabel": "What I did",
+      "technicalSpecsLabel": "Technical details",
       "toolsLabel": "Tools and technologies"
     },
     "controls": {
@@ -93,7 +93,7 @@
       "logoLabel": "Eren Işık",
       "homeAriaLabel": "Eren Işık ana sayfa",
       "links": [
-        { "label": "Çalışmalar", "href": "/#projects" },
+        { "label": "Projeler", "href": "/#projects" },
         { "label": "Hakkımda", "href": "/#about" },
         { "label": "İletişim", "href": "/#contact" }
       ]
@@ -102,22 +102,22 @@
       "eyebrow": "Gömülü · Sinyal İşleme · Simülasyon · GPU",
       "headlineLines": ["Yazılımın fiziksel dünyayla", "buluştuğu yer."],
       "headlineEmphasis": "fiziksel dünyayla",
-      "summary": "Yazılım ile donanımın kesiştiği noktada sistemler tasarlayıp geliştiriyorum — gerçek zamanlı gömülü kontrol, sinyal işleme ve makine öğrenmesi, sayısal simülasyon ve GPU hızlandırmalı hesaplama. İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim; ölçülebilir sonuçlara ve dürüst değerlendirmeye odaklanıyorum.",
-      "primaryCta": { "label": "Çalışmalarımı keşfet", "href": "#projects" },
-      "secondaryCta": { "label": "Bir sohbet başlat", "href": "#contact" }
+      "summary": "Donanımla yakın çalışan yazılımlar geliştiriyorum: küçük cihazlarda gerçek zamanlı kontrol, sinyal işleme ve makine öğrenmesi, fizik simülasyonları ve GPU hesaplama. İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim ve gerçek, ölçülebilir sonuçlara önem veriyorum.",
+      "primaryCta": { "label": "Çalışmalarımı gör", "href": "#projects" },
+      "secondaryCta": { "label": "İletişime geç", "href": "#contact" }
     },
     "projectsSection": {
-      "kicker": "Seçili çalışmalar",
-      "title": "Yapılan ve ölçülen şeylerin büyüyen bir kaydı.",
-      "intro": "Her dal bir projeyi kısıttan kanıta taşır: gömülü kontrol, paralel hesaplama ve bilgisayarlı görü.",
+      "kicker": "Seçili projeler",
+      "title": "Geliştirdiğim ve ölçtüğüm işler.",
+      "intro": "Gömülü sistemler, GPU hesaplama ve bilgisayarlı görü alanlarından birkaç proje; her biri için ölçtüğüm sonuçlarla birlikte.",
       "viewProjectLabel": "Projeyi gör",
       "cardAriaTemplate": "{title} hakkında oku"
     },
     "about": {
       "kicker": "Hakkımda",
-      "lead": "Zorlu kısıtları ve somut sonuçları severim.",
-      "bio": "İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim; yazılımın fiziği, zamanlamayı ve gürültülü gerçek dünya verisini gözetmek zorunda olduğu problemlere ilgi duyuyorum. Çalışmalarım gerçek zamanlı gömülü yazılım, sinyal işleme ve makine öğrenmesi, sayısal simülasyon ve GPU ile paralel hesaplamayı kapsıyor. Yakın zamanda TEKNOFEST rover'ımızın sürüş yazılımını 1 kHz'lik gerçek zamanlı bir kontrol döngüsüne dönüştürdüm ve yazılım tarafında sızıntıya karşı güvenli makine öğrenmesi ile fizik tabanlı simülasyonlar geliştirdim. Kulağa iddialı gelen rakamlardan çok, ölçülebilir sonuçlara ve dürüst değerlendirmeye önem veriyorum.",
-      "resumeLabel": "Tüm özgeçmişi indir",
+      "lead": "Gerçek ve ölçülebilir sonuçları olan zor problemleri severim.",
+      "bio": "İzmir Yüksek Teknoloji Enstitüsü'nde bilgisayar mühendisliği öğrencisiyim. Yazılımın gerçek dünyadaki fizik, zamanlama ve gürültülü verilerle başa çıkması gereken problemleri severim. Gerçek zamanlı gömülü yazılım, sinyal işleme ve makine öğrenmesi, fizik simülasyonları ve GPU hesaplama üzerine çalışıyorum. Yakın zamanda TEKNOFEST rover'ımızın motor yazılımını 1 kHz'lik gerçek zamanlı bir kontrol döngüsüne yeniden yazdım. Sonuçlarımı kulağa hoş gelen büyük rakamlara güvenmek yerine dürüstçe ölçmeye çalışırım.",
+      "resumeLabel": "Özgeçmişimi indir",
       "resumeHref": "/eren-isik-resume-2026.pdf",
       "nowLabel": "Şu an",
       "educationLabel": "Eğitim",
@@ -127,9 +127,9 @@
     },
     "contact": {
       "kicker": "İletişim",
-      "title": "Faydalı bir şeyler inşa edelim.",
-      "copy": "Stajlara, mühendislik rollerine ve araştırma iş birliklerine açığım — özellikle yazılımın gömülü sistemler, sinyal işleme, simülasyon veya yüksek başarımlı hesaplama ile kesiştiği yerlerde.",
-      "linkedinLabel": "LinkedIn'de beni bul",
+      "title": "Faydalı bir şeyler yapalım.",
+      "copy": "Staj ve mühendislik pozisyonları arıyorum, ayrıca araştırma konularında konuşmaya açığım. En çok gömülü sistemler, sinyal işleme, simülasyon ve yüksek başarımlı hesaplama ile ilgileniyorum.",
+      "linkedinLabel": "Beni LinkedIn'de bul",
       "form": {
         "nameLabel": "İsim",
         "namePlaceholder": "Adınız",
@@ -137,20 +137,20 @@
         "emailPlaceholder": "siz@ornek.com",
         "messageLabel": "Mesaj",
         "messagePlaceholder": "Ne üzerinde çalışıyorsunuz?",
-        "submitLabel": "E-posta oluştur",
+        "submitLabel": "E-posta yaz",
         "idleStatus": "Genellikle iki gün içinde yanıt veririm.",
-        "openingStatusTemplate": "Posta uygulamanız açılıyor… bir şey olmazsa doğrudan {email} adresine yazın."
+        "openingStatusTemplate": "Posta uygulamanız açılıyor… açılmazsa doğrudan {email} adresine yazın."
       }
     },
     "footer": {
       "copyrightName": "Eren Işık"
     },
     "projectDetail": {
-      "backLabel": "Seçili çalışmalara dön",
-      "viewRepositoryLabel": "Depoyu görüntüle",
+      "backLabel": "Projelere dön",
+      "viewRepositoryLabel": "Kodu gör",
       "measuredResultsLabel": "Ölçülen sonuçlar",
-      "engineeringRecordLabel": "Mühendislik kaydı",
-      "technicalSpecsLabel": "Teknik özellikler",
+      "engineeringRecordLabel": "Neler yaptım",
+      "technicalSpecsLabel": "Teknik detaylar",
       "toolsLabel": "Araçlar ve teknolojiler"
     },
     "controls": {
