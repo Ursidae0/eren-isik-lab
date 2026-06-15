@@ -1,6 +1,7 @@
 "use client";
 
 import { AtmosphereStatus } from "@/components/atmosphere-control";
+import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/preferences-provider";
 
 export function Navigation() {
@@ -26,7 +27,10 @@ export function Navigation() {
           ))}
         </div>
 
-        <AtmosphereStatus />
+        <div className="nav-controls">
+          <LanguageToggle />
+          <AtmosphereStatus />
+        </div>
       </nav>
     </header>
   );

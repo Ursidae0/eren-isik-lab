@@ -515,6 +515,44 @@ textarea:focus-visible {
   white-space: nowrap;
 }
 
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.2rem;
+  border: 1px solid rgb(246 242 225 / 18%);
+  border-radius: 999px;
+}
+
+.lang-toggle-option {
+  border-radius: 999px;
+  padding: 0.4rem 0.55rem;
+  color: rgb(245 241 223 / 58%);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.lang-toggle-option:hover {
+  color: #fffdf2;
+}
+
+.lang-toggle-option[data-active="true"] {
+  color: #0e1a12;
+  background: rgb(245 241 223 / 90%);
+}
+
 .hero {
   position: relative;
   z-index: 10;
@@ -1531,6 +1569,19 @@ textarea:focus-visible {
     gap: 0.4rem;
     padding-inline: 0.65rem;
     font-size: 0.58rem;
+  }
+
+  .atmosphere-status-label {
+    display: none;
+  }
+
+  .nav-controls {
+    gap: 0.2rem;
+  }
+
+  .lang-toggle-option {
+    padding-inline: 0.45rem;
+    font-size: 0.56rem;
   }
 
   .hero {
