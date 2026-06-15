@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import {
   useEffect,
@@ -8,6 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
+import { useLanguage } from "@/components/preferences-provider";
 import type { Project } from "@/lib/projects";
 
 type ProjectGalleryProps = {
@@ -19,8 +19,6 @@ const treePaths = [
   "M60 180C39 153 22 136 7 126M61 365C79 333 93 307 113 287M59 554C37 526 21 501 4 478M58 749C80 717 96 689 115 666M57 941C37 915 21 888 4 861",
   "M59 1183C39 1190 23 1196 8 1200M61 1183C81 1190 98 1196 114 1200",
 ];
-
-const cardBounds = new WeakMap<HTMLAnchorElement, DOMRect>();
 
 function TreeSvg({ progress = false }: { progress?: boolean }) {
   return (
@@ -49,7 +47,7 @@ function handleCardPointerMove(event: ReactPointerEvent<HTMLAnchorElement>) {
   }
 
   const card = event.currentTarget;
-  const bounds = cardBounds.get(card) ?? card.getBoundingClientRect();
+  const bounds = card.getBoundingClientRect();
   const x = (event.clientX - bounds.left) / bounds.width;
   const y = (event.clientY - bounds.top) / bounds.height;
 
@@ -59,18 +57,8 @@ function handleCardPointerMove(event: ReactPointerEvent<HTMLAnchorElement>) {
   card.style.setProperty("--card-glow-y", `${y * 100}%`);
 }
 
-function cacheCardBounds(event: ReactPointerEvent<HTMLAnchorElement>) {
-  if (event.pointerType === "mouse") {
-    cardBounds.set(
-      event.currentTarget,
-      event.currentTarget.getBoundingClientRect(),
-    );
-  }
-}
-
 function resetCardTilt(event: ReactPointerEvent<HTMLAnchorElement>) {
   const card = event.currentTarget;
-  cardBounds.delete(card);
   card.style.setProperty("--card-rotate-x", "0deg");
   card.style.setProperty("--card-rotate-y", "0deg");
   card.style.setProperty("--card-glow-x", "50%");
@@ -78,6 +66,8 @@ function resetCardTilt(event: ReactPointerEvent<HTMLAnchorElement>) {
 }
 
 export function ProjectGallery({ projects }: ProjectGalleryProps) {
+  const { content } = useLanguage();
+  const section = content.projectsSection;
   const treeRef = useRef<HTMLDivElement>(null);
   const growthRef = useRef<HTMLDivElement>(null);
 
@@ -145,15 +135,10 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
     <section id="projects" className="paper-section">
       <div className="section-shell">
         <div className="section-intro">
-          <p className="section-kicker">Selected work</p>
+          <p className="section-kicker">{section.kicker}</p>
           <div>
-            <h2 className="section-title">
-              A growing record of things built and measured.
-            </h2>
-            <p className="section-copy">
-              Each branch follows a project from constraint to evidence:
-              embedded control, parallel compute, and computer vision.
-            </p>
+            <h2 className="section-title">{section.title}</h2>
+            <p className="section-copy">{section.intro}</p>
           </div>
         </div>
 
@@ -175,23 +160,13 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
               <Link
                 href={`/projects/${project.id}`}
                 className="project-card"
-                aria-label={`Read about ${project.title}`}
-                onPointerEnter={cacheCardBounds}
+                aria-label={section.cardAriaTemplate.replace(
+                  "{title}",
+                  project.title,
+                )}
                 onPointerMove={handleCardPointerMove}
                 onPointerLeave={resetCardTilt}
               >
-                <div className="project-image">
-                  <Image
-                    src={project.image}
-                    alt={project.imageAlt}
-                    fill
-                    loading="lazy"
-                    decoding="async"
-                    unoptimized
-                    sizes="(min-width: 901px) 42vw, 82vw"
-                  />
-                </div>
-
                 <div className="project-card-body">
                   <div className="project-meta">
                     <span>{project.categories.join(" / ")}</span>
@@ -201,20 +176,20 @@ export function ProjectGallery({ projects }: ProjectGalleryProps) {
                   <h3>{project.title}</h3>
                   <p className="project-card-summary">{project.summary}</p>
 
-                  <div className="project-metrics">
+                  <div className="project-chips">
                     {project.metrics.slice(0, 2).map((metric) => (
-                      <div
-                        className="project-metric"
+                      <span
+                        className="project-chip"
                         key={`${project.id}-${metric.label}`}
                       >
-                        <strong>{metric.value}</strong>
-                        <span>{metric.label}</span>
-                      </div>
+                        <strong>{metric.value}</strong> {metric.label}
+                      </span>
                     ))}
                   </div>
 
                   <span className="project-link">
-                    View project <span aria-hidden="true">↗</span>
+                    {section.viewProjectLabel}{" "}
+                    <span aria-hidden="true">↗</span>
                   </span>
                 </div>
               </Link>
