@@ -1,54 +1,37 @@
+"use client";
+
+import { useLanguage } from "@/components/preferences-provider";
 import { education, experience, technicalSkills } from "@/lib/projects";
 
-const featuredSkills = [
-  ...technicalSkills.programming,
-  "NumPy",
-  "SciPy",
-  "scikit-learn",
-  "ROS 2",
-  "Raspberry Pi Pico",
-  "Docker",
-];
-
 export function ProfileSnapshot() {
+  const { content } = useLanguage();
+  const { about } = content;
   const role = experience[0];
   const school = education[0];
+  const featuredSkills = [
+    ...technicalSkills.programming,
+    ...about.featuredSkills,
+  ];
 
   return (
     <section id="about" className="paper-section">
       <div className="section-shell profile-grid">
         <div>
-          <p className="section-kicker">About</p>
-          <h2 className="profile-lead">
-            I like difficult constraints and tangible outcomes.
-          </h2>
-          <p className="profile-copy">
-            I am a computer engineering student at Izmir Institute of
-            Technology, drawn to problems where software has to respect
-            physics, timing, and noisy real-world data. My work spans real-time
-            embedded firmware, signal processing and machine learning,
-            numerical simulation, and GPU and parallel computing. Recently I
-            rewrote our TEKNOFEST rover&apos;s drive firmware into a 1 kHz
-            real-time control loop, and built leakage-safe ML and physics-based
-            simulations on the software side. I care about measured results and
-            honest evaluation more than big-sounding numbers.
-          </p>
-          <a
-            href="/eren-isik-resume-2026.pdf"
-            className="text-link"
-            download
-          >
-            Download full resume <span aria-hidden="true">↓</span>
+          <p className="section-kicker">{about.kicker}</p>
+          <h2 className="profile-lead">{about.lead}</h2>
+          <p className="profile-copy">{about.bio}</p>
+          <a href={about.resumeHref} className="text-link" download>
+            {about.resumeLabel} <span aria-hidden="true">↓</span>
           </a>
         </div>
 
         <div className="profile-aside">
           <div className="profile-block">
-            <span className="profile-label">Now</span>
+            <span className="profile-label">{about.nowLabel}</span>
             <h3>
               {role.role}
               <br />
-              at {role.organization}
+              {about.atPreposition} {role.organization}
             </h3>
             <p>
               {role.program} · {role.period}
@@ -56,7 +39,7 @@ export function ProfileSnapshot() {
           </div>
 
           <div className="profile-block">
-            <span className="profile-label">Education</span>
+            <span className="profile-label">{about.educationLabel}</span>
             <h3>{school.degree}</h3>
             <p>
               {school.institution} · {school.period}
@@ -64,7 +47,7 @@ export function ProfileSnapshot() {
           </div>
 
           <div className="profile-block">
-            <span className="profile-label">Working with</span>
+            <span className="profile-label">{about.workingWithLabel}</span>
             <div className="skill-list">
               {featuredSkills.map((skill) => (
                 <span key={skill}>{skill}</span>

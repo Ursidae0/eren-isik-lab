@@ -3,19 +3,15 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 
+import { useLanguage } from "@/components/preferences-provider";
 import { buildContactMailto } from "@/lib/contact";
 import { siteConfig } from "@/lib/site";
 
-type FormState = {
-  status: "idle" | "opening";
-  message: string;
-};
-
 export function ContactSection() {
-  const [state, setState] = useState<FormState>({
-    status: "idle",
-    message: "I usually reply within two days.",
-  });
+  const { content } = useLanguage();
+  const contact = content.contact;
+  const form = contact.form;
+  const [status, setStatus] = useState<"idle" | "opening">("idle");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,25 +23,22 @@ export function ContactSection() {
       message: String(formData.get("message") ?? ""),
     });
 
-    setState({
-      status: "opening",
-      message: `Opening your mail app… if nothing happens, email ${siteConfig.email} directly.`,
-    });
-
+    setStatus("opening");
     window.location.href = href;
   }
+
+  const statusMessage =
+    status === "opening"
+      ? form.openingStatusTemplate.replace("{email}", siteConfig.email)
+      : form.idleStatus;
 
   return (
     <section id="contact" className="contact-section">
       <div className="section-shell contact-grid">
         <div>
-          <p className="section-kicker">Contact</p>
-          <h2 className="contact-title">Let&apos;s build something useful.</h2>
-          <p className="contact-copy">
-            I&apos;m open to internships, engineering roles, and research
-            collaborations — especially where software meets embedded systems,
-            signal processing, simulation, or high-performance computing.
-          </p>
+          <p className="section-kicker">{contact.kicker}</p>
+          <h2 className="contact-title">{contact.title}</h2>
+          <p className="contact-copy">{contact.copy}</p>
           <div
             style={{
               display: "flex",
@@ -69,7 +62,7 @@ export function ContactSection() {
               className="contact-direct"
               style={{ marginTop: 0 }}
             >
-              Find me on LinkedIn ↗
+              {contact.linkedinLabel} ↗
             </a>
           </div>
         </div>
@@ -77,7 +70,7 @@ export function ContactSection() {
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="form-row">
             <div className="field">
-              <label htmlFor="callsign">Name</label>
+              <label htmlFor="callsign">{form.nameLabel}</label>
               <input
                 id="callsign"
                 name="callsign"
@@ -86,12 +79,12 @@ export function ContactSection() {
                 maxLength={80}
                 autoComplete="name"
                 required
-                placeholder="Your name"
+                placeholder={form.namePlaceholder}
               />
             </div>
 
             <div className="field">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{form.emailLabel}</label>
               <input
                 id="email"
                 name="email"
@@ -99,33 +92,29 @@ export function ContactSection() {
                 maxLength={160}
                 autoComplete="email"
                 required
-                placeholder="you@example.com"
+                placeholder={form.emailPlaceholder}
               />
             </div>
           </div>
 
           <div className="field">
-            <label htmlFor="message">Message</label>
+            <label htmlFor="message">{form.messageLabel}</label>
             <textarea
               id="message"
               name="message"
               minLength={10}
               maxLength={2000}
               required
-              placeholder="What are you working on?"
+              placeholder={form.messagePlaceholder}
             />
           </div>
 
           <div className="form-footer">
-            <p
-              className="form-status"
-              data-state={state.status}
-              aria-live="polite"
-            >
-              {state.message}
+            <p className="form-status" data-state={status} aria-live="polite">
+              {statusMessage}
             </p>
             <button type="submit" className="contact-submit">
-              Compose email
+              {form.submitLabel}
               <span aria-hidden="true">→</span>
             </button>
           </div>
